@@ -1,0 +1,14 @@
+.box-list {
+  background-color: yellow;
+}
+
+.displayed {
+  /* background-color: red; */
+  font-size: 20px;
+  color: red;
+}
+
+.notdisplayed {
+  background-color: green;
+  display: none;
+}
