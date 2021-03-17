@@ -13,7 +13,7 @@ const Phenomenon = () => {
     "Autre",
   ];
 
-  const [phenomenon, setPhenomenon] = useState();
+  const [phenomenon, setPhenomenon] = useState("");
 
   const handleChange = (event) => {
     console.log("Phénomène selectionné");
@@ -22,7 +22,6 @@ const Phenomenon = () => {
 
   return (
     <div>
-      <div></div>
       <form>
         <div>Nom du phénomène :</div>
         <select value={phenomenon} onChange={handleChange}>

@@ -3,7 +3,7 @@ import AllPhenomenons from "./AllPhenomenons";
 import "./Territoires.css";
 
 const Territoires = ({ phenomenon, setPhenomenon }) => {
-  console.log(phenomenon);
+  // console.log(phenomenon, territoire);
 
   const territoires = [
     "...",
@@ -82,6 +82,8 @@ const Territoires = ({ phenomenon, setPhenomenon }) => {
   const [territoire, setTerritoire] = useState();
   const [saveData, setSaveData] = useState([]);
 
+  console.log(phenomenon);
+
   const handleChange = (event) => {
     console.log("Territoire Selected");
     setTerritoire(event.target.value);
@@ -90,9 +92,9 @@ const Territoires = ({ phenomenon, setPhenomenon }) => {
   const handleSubmit = (event) => {
     alert(`Data saved ${phenomenon} ${territoire}`);
     event.preventDefault();
-    const newData = [...saveData];
-    // newData.push(territoire);
-    newData.push([phenomenon, territoire]);
+    let newData = [...saveData];
+    // newData.push(territoire); ==> "C2"
+    newData.push([phenomenon, territoire]); // ==> CourbaturesC2 (mauvais rendu)
     setSaveData(newData);
   };
 
@@ -103,14 +105,16 @@ const Territoires = ({ phenomenon, setPhenomenon }) => {
       <div className="box">
         {/* <h3>Territoires</h3> */}
         <form onSubmit={handleSubmit}>
-          <div>Territoire :</div>
-          <select value={territoire} onChange={handleChange}>
-            {territoires.map((territoire, index) => (
-              <option key={index} value={territoire}>
-                {territoire}
-              </option>
-            ))}
-          </select>
+          <div>
+            <div>Territoire :</div>
+            <select value={territoire} onChange={handleChange}>
+              {territoires.map((territoire, index) => (
+                <option key={index} value={territoire}>
+                  {territoire}
+                </option>
+              ))}
+            </select>
+          </div>
           <input type="submit" value="Enregistrer" />
         </form>
       </div>
