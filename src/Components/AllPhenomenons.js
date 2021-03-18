@@ -9,16 +9,20 @@ import { Button, Modal } from "react-bootstrap";
 const AllPhenomenons = ({ saveData, setSaveData }) => {
   const [hoverTest, setHoverTest] = useState("notdisplayed");
   const [showDetails, setShowDetails] = useState(false);
+  const [formSelected, setFormSelected] = useState();
 
   const [showModal, setShowModal] = useState(false);
 
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
 
+  console.log(formSelected);
+
   // Test Hover
   const seeButton = (event) => {
     event.preventDefault();
     setHoverTest("displayed");
+    setFormSelected(event);
   };
 
   const hideButton = (event) => {
@@ -78,7 +82,7 @@ const AllPhenomenons = ({ saveData, setSaveData }) => {
                   icon={faTrashAlt}
                   className={hoverTest}
                   onClick={() => {
-                    alert(`Delete ${row} ?`);
+                    alert(`Delete ${row.pheno} ${row.territoire} ?`);
                     // Pour supprimer un phénomène
                     // Copie saveData
                     const newData = [...saveData];
@@ -87,7 +91,6 @@ const AllPhenomenons = ({ saveData, setSaveData }) => {
                     newData.splice(index, 1);
                     // Rafraichissement de l'état avec newData
                     setSaveData(newData);
-                    setShowDetails(!showDetails);
                   }}
                 />
                 <FontAwesomeIcon
@@ -102,12 +105,39 @@ const AllPhenomenons = ({ saveData, setSaveData }) => {
                     setSaveData(newData);
 
                     setShowDetails(!showDetails);
+                    setShowModal(handleShow);
                   }}
                 />
               </div>
             </div>
           );
         })}
+
+        <div>
+          <Modal show={showModal} onHide={handleClose}>
+            <Modal.Header
+              // closeButton
+              style={{
+                display: "flex",
+                // justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {/* <Modal.Title>Evolutions</Modal.Title> */}
+            </Modal.Header>
+            <Modal.Body>
+              <Evolution saveData={saveData} setSaveData={setSaveData} />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleClose}>
+                Save Changes
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
       </div>
 
       {/* <ModalTest /> */}
