@@ -1,6 +1,6 @@
 import React from "react";
-import Territoires from "../Components/Territoires";
-import Phenomenon from "../Components/Phenomenon";
+import Form from "../Components/Form";
+import ModalTest from "../Components/ModalTest";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faSave } from "@fortawesome/free-solid-svg-icons";
 import "./FormCard.css";
@@ -8,8 +8,8 @@ import "./FormCard.css";
 const FormCard = () => {
   return (
     <div className="wrapper">
-      <Phenomenon />
-      {/* <Territoires /> */}
+      <Form />
+      <ModalTest />
 
       <div className="card-footer">
         <div

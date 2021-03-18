@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 
-const Evolution = () => {
+const Evolution = (props) => {
+  console.log(props);
+
   const [appartionDate, setAppartionDate] = useState("");
   const [unchangedDate, setUnchangedDate] = useState("");
   const [aggravationDate, setAggravationDate] = useState("");
   const [disappearedDate, setDisappearedDate] = useState("");
   const [evolutions, setEvolutions] = useState([]);
 
-  const handleSubmit = (event, index) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     if (
       appartionDate !== "" ||

@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import Evolution from "./Evolution";
+import ModalTest from "./ModalTest";
 import "./AllPhenomenons.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { Button, Modal } from "react-bootstrap";
 
 const AllPhenomenons = ({ saveData, setSaveData }) => {
-  console.log(saveData);
-
   const [hoverTest, setHoverTest] = useState("notdisplayed");
   const [showDetails, setShowDetails] = useState(false);
+
+  const [showModal, setShowModal] = useState(false);
+
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
 
   // Test Hover
   const seeButton = (event) => {
@@ -42,8 +47,7 @@ const AllPhenomenons = ({ saveData, setSaveData }) => {
       >
         <h3>Tous les Phénomènes</h3>
         {/* Afficher la liste des phénomènes */}
-        {saveData.map((pheno, index) => {
-          console.log(pheno);
+        {saveData.map((row, index) => {
           return (
             <div
               key={index}
@@ -59,7 +63,9 @@ const AllPhenomenons = ({ saveData, setSaveData }) => {
               onMouseEnter={(event) => seeButton(event)}
               onMouseLeave={(event) => hideButton(event)}
             >
-              <div>{pheno}</div>
+              <div>
+                {row.pheno} - {row.territoire}
+              </div>
 
               <div
                 style={{
@@ -72,7 +78,7 @@ const AllPhenomenons = ({ saveData, setSaveData }) => {
                   icon={faTrashAlt}
                   className={hoverTest}
                   onClick={() => {
-                    alert(`Delete ${pheno} ?`);
+                    alert(`Delete ${row} ?`);
                     // Pour supprimer un phénomène
                     // Copie saveData
                     const newData = [...saveData];
@@ -92,9 +98,8 @@ const AllPhenomenons = ({ saveData, setSaveData }) => {
                     // Pour afficher l'évolution d'un phénomène
                     // Copie saveData
                     const newData = [...saveData];
-                    // console.log(newData[index]);
-                    //
-                    setSaveData(newData[index]);
+
+                    setSaveData(newData);
 
                     setShowDetails(!showDetails);
                   }}
@@ -105,8 +110,10 @@ const AllPhenomenons = ({ saveData, setSaveData }) => {
         })}
       </div>
 
+      {/* <ModalTest /> */}
+
       <div style={{ visibility }}>
-        <Evolution />
+        <Evolution saveData={saveData} setSaveData={setSaveData} />
         <button
           onClick={() => {
             alert("Fermer évolution");
