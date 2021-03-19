@@ -1,6 +1,5 @@
 import React from "react";
 import Form from "../Components/Form";
-import ModalTest from "../Components/ModalTest";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faSave } from "@fortawesome/free-solid-svg-icons";
 import "./FormCard.css";
@@ -9,7 +8,6 @@ const FormCard = () => {
   return (
     <div className="wrapper">
       <Form />
-      <ModalTest />
 
       <div className="card-footer">
         <div

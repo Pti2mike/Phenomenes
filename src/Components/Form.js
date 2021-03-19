@@ -116,6 +116,7 @@ const Form = () => {
       const response = await axios.post("http://localhost:3000/add-form", form);
 
       console.log("phenoToSave", response);
+      setData(response.data.newForm);
     } catch (error) {
       alert({ error: error.message });
     }
@@ -166,7 +167,12 @@ const Form = () => {
         <input type="submit" value="Enregistrer" />
       </form>
 
-      <AllPhenomenons saveData={list} setSaveData={setList} />
+      <AllPhenomenons
+        forms={data}
+        setForms={setForm}
+        saveData={list}
+        setSaveData={setList}
+      />
     </div>
   );
 };
