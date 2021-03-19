@@ -16,8 +16,12 @@ const AllPhenomenons = ({ forms, setForms, saveData, setSaveData }) => {
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
 
+<<<<<<< HEAD
   // console.log(formSelected);
   console.log(forms);
+=======
+  console.log(formSelected);
+>>>>>>> b3019b61db80d802cc6feacf869e5b1f1ef7c93a
 
   // Test Hover
   const seeButton = (event) => {
@@ -85,6 +89,7 @@ const AllPhenomenons = ({ forms, setForms, saveData, setSaveData }) => {
                 onMouseEnter={(event) => seeButton(event)}
                 onMouseLeave={(event) => hideButton(event)}
               >
+<<<<<<< HEAD
                 <div>
                   {form.pheno} - {form.territoire}
                 </div>
@@ -94,6 +99,36 @@ const AllPhenomenons = ({ forms, setForms, saveData, setSaveData }) => {
                     display: "flex",
                     justifyContent: "space-around",
                     width: 50,
+=======
+                <FontAwesomeIcon
+                  icon={faTrashAlt}
+                  className={hoverTest}
+                  onClick={() => {
+                    alert(`Delete ${row.pheno} ${row.territoire} ?`);
+                    // Pour supprimer un phénomène
+                    // Copie saveData
+                    const newData = [...saveData];
+
+                    // Suppression d'un élément selon son index
+                    newData.splice(index, 1);
+                    // Rafraichissement de l'état avec newData
+                    setSaveData(newData);
+                  }}
+                />
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  className={hoverTest}
+                  onClick={() => {
+                    alert("Open evolution");
+                    // Pour afficher l'évolution d'un phénomène
+                    // Copie saveData
+                    const newData = [...saveData];
+
+                    setSaveData(newData);
+
+                    setShowDetails(!showDetails);
+                    setShowModal(handleShow);
+>>>>>>> b3019b61db80d802cc6feacf869e5b1f1ef7c93a
                   }}
                 >
                   <FontAwesomeIcon
@@ -134,8 +169,14 @@ const AllPhenomenons = ({ forms, setForms, saveData, setSaveData }) => {
                   />
                 </div>
               </div>
+<<<<<<< HEAD
             );
           })}
+=======
+            </div>
+          );
+        })}
+>>>>>>> b3019b61db80d802cc6feacf869e5b1f1ef7c93a
 
         <div>
           <Modal show={showModal} onHide={handleClose}>
