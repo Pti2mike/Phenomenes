@@ -90,7 +90,7 @@ const Form = () => {
 
   const [data, setData] = useState();
   const [form, setForm] = useState({ pheno: "", territoire: "" });
-  const [list, setList] = useState([]);
+  // const [list, setList] = useState([]);
 
   // Get all data from database
 
@@ -99,7 +99,6 @@ const Form = () => {
       const response = await axios.get("http://localhost:3000/all-forms");
 
       setData(response.data.form);
-      console.log(response.data);
     } catch (error) {
       alert({ error: error.message });
     }
@@ -115,7 +114,7 @@ const Form = () => {
     try {
       const response = await axios.post("http://localhost:3000/add-form", form);
 
-      console.log("phenoToSave", response);
+      setData(response.data.resultat);
     } catch (error) {
       alert({ error: error.message });
     }
@@ -137,7 +136,7 @@ const Form = () => {
 
     phenoToSave();
 
-    setList([...list, form]);
+    //setList([...list, form]);
   };
 
   return (
@@ -166,7 +165,7 @@ const Form = () => {
         <input type="submit" value="Enregistrer" />
       </form>
 
-      <AllPhenomenons saveData={list} setSaveData={setList} />
+      <AllPhenomenons forms={data} setForms={setForm} setData={setData} />
     </div>
   );
 };
