@@ -22,6 +22,8 @@ const AllPhenomenons = ({ forms, setForms, setData }) => {
   const [seletedID, setSelectedID] = useState();
   const [selectedEvolID, setSelectedEvolID] = useState();
 
+  // console.log("props", forms);
+
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
   // console.log("formSlected", formSelected);
@@ -36,9 +38,9 @@ const AllPhenomenons = ({ forms, setForms, setData }) => {
   // Test visibilité
   const visibility = selectedEvolID ? "visible" : "hidden";
 
-  // Supprimer un form à revoir !!!!!! Pb identification via id
+  // Supprimer un form
   const deleteForm = async (id) => {
-    console.log(id);
+    // console.log(id); // on récupère l'id du form concerné
     try {
       const response = await axios.post(`http://localhost:3000/delete-form`, {
         id,
@@ -64,9 +66,8 @@ const AllPhenomenons = ({ forms, setForms, setData }) => {
       title4 !== ""
     ) {
       const response = await axios.post(
-        "http://localhost:3000/update-evolution",
+        `http://localhost:3000/add-evolution/${seletedID}`,
         {
-          id: seletedID,
           appartionDate,
           unchangedDate,
           aggravationDate,
@@ -77,7 +78,15 @@ const AllPhenomenons = ({ forms, setForms, setData }) => {
           title4,
         }
       );
-      setData(response.data.resultat);
+      // setData(response.data.resultat);
+      setData([
+        ...forms.map((row) => {
+          if (row._id === seletedID) {
+            row.evolutions.push(response.data.resultat);
+          }
+          return row;
+        }),
+      ]);
       setAppartionDate("");
       setUnchangedDate("");
       setAggravationDate("");
@@ -86,6 +95,7 @@ const AllPhenomenons = ({ forms, setForms, setData }) => {
       setTitle2("");
       setTitle3("");
       setTitle4("");
+      handleClose();
     } else {
       alert("Merci de remplir un champ");
     }
@@ -139,7 +149,8 @@ const AllPhenomenons = ({ forms, setForms, setData }) => {
               variant="primary"
               onClick={() => {
                 handleSubmit();
-                handleClose();
+
+                // addEvolution();
               }}
             >
               Save Changes
@@ -179,6 +190,7 @@ const AllPhenomenons = ({ forms, setForms, setData }) => {
                 onClick={() => {
                   setShowDetails(!showDetails);
                   setSelectedEvolID(form._id);
+                  console.log(form);
                 }}
               >
                 <div>
@@ -219,14 +231,6 @@ const AllPhenomenons = ({ forms, setForms, setData }) => {
 
       <div style={{ visibility }}>
         <ReadEvolution forms={forms} id={selectedEvolID} />
-        <button
-          onClick={() => {
-            alert("Fermer évolution");
-            setShowDetails(!showDetails);
-          }}
-        >
-          Fermer
-        </button>
       </div>
     </div>
   );

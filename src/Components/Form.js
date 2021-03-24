@@ -6,7 +6,7 @@ const Form = () => {
   const phenomenons = [
     "...",
     "Douleur",
-    "Coubatures",
+    "Courbatures",
     "Asthénie",
     "Vertiges",
     "Paresthésie",
@@ -88,9 +88,23 @@ const Form = () => {
     "Pied",
   ];
 
+  const majorated = ["...", "oui", "non"];
+
+  const mobilities = ["...", "oui", "non"];
+
+  const checkUp = ["...", "Absent", "Bénin"];
+
   const [data, setData] = useState();
-  const [form, setForm] = useState({ pheno: "", territoire: "" });
-  // const [list, setList] = useState([]);
+  const [form, setForm] = useState({
+    // pheno: "",
+    // territoire: "",
+    // majoré: "",
+    // date: "",
+    // douleur: "",
+    // mobility: "",
+    // checkUp: "",
+    // precision: "",
+  });
 
   // Get all data from database
 
@@ -99,6 +113,7 @@ const Form = () => {
       const response = await axios.get("http://localhost:3000/all-forms");
 
       setData(response.data.form);
+      console.log(response.data.form[2].evolutions[0]);
     } catch (error) {
       alert({ error: error.message });
     }
@@ -124,8 +139,20 @@ const Form = () => {
   const handleChange = (e, type) => {
     if (type === "pheno") {
       setForm({ ...form, pheno: e.target.value });
-    } else {
+    } else if (type === "territoire") {
       setForm({ ...form, territoire: e.target.value });
+    } else if (type === "majoré") {
+      setForm({ ...form, majoré: e.target.value });
+    } else if (type === "date") {
+      setForm({ ...form, date: e.target.value });
+    } else if (type === "douleur") {
+      setForm({ ...form, douleur: e.target.value });
+    } else if (type === "mobility") {
+      setForm({ ...form, mobility: e.target.value });
+    } else if (type === "checkUp") {
+      setForm({ ...form, checkUp: e.target.value });
+    } else {
+      setForm({ ...form, precision: e.target.value });
     }
   };
 
@@ -135,13 +162,12 @@ const Form = () => {
     e.preventDefault();
 
     phenoToSave();
-
-    //setList([...list, form]);
+    setForm({});
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form style={{ marginBottom: 20 }} onSubmit={handleSubmit}>
         <div>Nom du phénomène :</div>
         <select value={form.pheno} onChange={(e) => handleChange(e, "pheno")}>
           {phenomenons.map((pheno, index) => (
@@ -162,7 +188,61 @@ const Form = () => {
             </option>
           ))}
         </select>
-        <input type="submit" value="Enregistrer" />
+
+        <div>Majoré par le mouvement :</div>
+        <select value={form.majoré} onChange={(e) => handleChange(e, "majoré")}>
+          {majorated.map((major, index) => (
+            <option key={index} value={major}>
+              {major}
+            </option>
+          ))}
+        </select>
+
+        <div>
+          <div>Date :</div>
+          <input
+            type="date"
+            value={form.date}
+            onChange={(e) => handleChange(e, "date")}
+          />
+        </div>
+
+        {/* Insérer le niveau de douleur */}
+
+        <div>Mobilité globale restreinte :</div>
+        <select
+          value={form.mobility}
+          onChange={(e) => handleChange(e, "mobility")}
+        >
+          {mobilities.map((mobility, index) => (
+            <option key={index} value={mobility}>
+              {mobility}
+            </option>
+          ))}
+        </select>
+
+        <div>Bilan Médical :</div>
+        <select
+          value={form.checkUp}
+          onChange={(e) => handleChange(e, "checkUp")}
+        >
+          {checkUp.map((check, index) => (
+            <option key={index} value={check}>
+              {check}
+            </option>
+          ))}
+        </select>
+
+        <div>
+          <div>Précision :</div>
+          <textarea
+            value={form.precision}
+            placeholder="Votre texte ici..."
+            onChange={(e) => handleChange(e, "precision")}
+          />
+        </div>
+
+        <input type="submit" value="Ajouter" />
       </form>
 
       <AllPhenomenons forms={data} setForms={setForm} setData={setData} />

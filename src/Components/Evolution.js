@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 const Evolution = ({
   appartionDate,
@@ -18,8 +18,6 @@ const Evolution = ({
   title4,
   setTitle4,
 }) => {
-  const [evolutions, setEvolutions] = useState([]);
-
   return (
     <div
       style={{
@@ -40,7 +38,7 @@ const Evolution = ({
               type="date"
               value={appartionDate}
               onChange={(event) => {
-                console.log("Date selectionnée");
+                // console.log("Date selectionnée");
                 setAppartionDate(event.target.value);
               }}
             />

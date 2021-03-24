@@ -3,17 +3,22 @@ import { format } from "date-fns";
 
 const ReadEvolution = ({ forms, id }) => {
   const [info, setInfo] = useState();
+  // console.log(info);
+
+  // console.log("forms", forms);
 
   useEffect(() => {
     if (forms) {
       for (let index = 0; index < forms.length; index++) {
-        console.log(forms[index]);
+        // console.log(forms[index]);
         if (forms[index]._id === id) {
           setInfo(forms[index]);
         }
       }
     }
   }, [forms, id]);
+
+  // console.log(info.evolutions);
 
   return (
     <div
@@ -25,87 +30,114 @@ const ReadEvolution = ({ forms, id }) => {
         marginBottom: 10,
       }}
     >
-      <h3>Evolution</h3>
+      <h3>Evolutions</h3>
       {info && (
-        <form style={{ marginBottom: 30 }}>
-          {/* 1er bloc */}
-          <div style={{ marginBottom: 20 }}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>Apparition</span>
-              <input
-                type="date"
-                value={
-                  info.evolution.apparation
-                    ? format(new Date(info.evolution.apparation), "yyyy-MM-dd")
-                    : ""
-                }
-                disabled
-              />
-            </div>
+        <>
+          {info.evolutions.map((evo, index) => (
+            <div
+              key={index}
+              style={{ border: "solid black", marginBottom: 10 }}
+            >
+              {evo ? (
+                <>
+                  {/* 1er bloc */}
+                  <div style={{ marginBottom: 20 }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span>Apparition</span>
+                      {evo.apparation
+                        ? format(new Date(evo.apparation), "dd/MM/yyyy")
+                        : ""}
+                    </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>Inchangé</span>
-              <input
-                type="date"
-                value={
-                  info.evolution.unchanged
-                    ? format(new Date(info.evolution.unchanged), "yyyy-MM-dd")
-                    : ""
-                }
-                disabled
-              />
-            </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span>Inchangé</span>
+                      {evo.unchanged
+                        ? format(new Date(evo.unchanged), "dd/MM/yyyy")
+                        : ""}
+                    </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>Title 1</span>
-              <input type="textarea" value={info.evolution.title1} disabled />
-            </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span>Title 1</span>
+                      {evo.title1}
+                    </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>Title 2</span>
-              <input type="textarea" value={info.evolution.title2} disabled />
-            </div>
-          </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span>Title 2</span>
+                      {evo.title2}
+                    </div>
+                  </div>
 
-          {/* 2ème bloc */}
-          <div style={{ marginBottom: 20 }}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>Aggravation</span>
-              <input
-                type="date"
-                value={
-                  info.evolution.aggravation
-                    ? format(new Date(info.evolution.aggravation), "yyyy-MM-dd")
-                    : ""
-                }
-                disabled
-              />
-            </div>
+                  {/* 2ème bloc */}
+                  <div style={{ marginBottom: 20 }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span>Aggravation</span>
+                      {evo.aggravation
+                        ? format(new Date(evo.aggravation), "dd/MM/yyyy")
+                        : ""}
+                    </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>Disparition</span>
-              <input
-                type="date"
-                value={
-                  info.evolution.disappear
-                    ? format(new Date(info.evolution.disappear), "yyyy-MM-dd")
-                    : ""
-                }
-                disabled
-              />
-            </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span>Disparition</span>
+                      {evo.disappear
+                        ? format(new Date(evo.disappear), "dd/MM/yyyy")
+                        : ""}
+                    </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>Title 3</span>
-              <input type="textarea" value={info.evolution.title3} disabled />
-            </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span>Title 3</span>
+                      {evo.title3}
+                    </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>Title 4</span>
-              <input type="textarea" value={info.evolution.title4} disabled />
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span>Title 4</span>
+                      {evo.title4}
+                    </div>
+                  </div>
+                </>
+              ) : null}
             </div>
-          </div>
-        </form>
+          ))}
+        </>
       )}
     </div>
   );
