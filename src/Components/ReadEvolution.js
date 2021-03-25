@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Accordion, Button, Card } from "react-bootstrap";
+import { Accordion, Button, Card, Modal } from "react-bootstrap";
 import { format } from "date-fns";
 import Evolution from "./Evolution";
 
 const ReadEvolution = ({ forms, id }) => {
   const [info, setInfo] = useState();
+  const [showModal, setShowModal] = useState(false);
   console.log(info);
 
   // console.log("forms", forms);
+
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
 
   useEffect(() => {
     if (forms) {
@@ -36,6 +40,30 @@ const ReadEvolution = ({ forms, id }) => {
       {/* Test Accordion */}
       {info && (
         <>
+          <div>
+            <Modal show={showModal} onHide={handleClose}>
+              <Modal.Header
+                closeButton
+                onClick={() => {
+                  setShowModal();
+                }}
+              >
+                <Modal.Title>Modal title</Modal.Title>
+              </Modal.Header>
+
+              <Modal.Body>
+                <p>Modal body text goes here.</p>
+              </Modal.Body>
+
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                  Close
+                </Button>
+                <Button variant="primary">Save changes</Button>
+              </Modal.Footer>
+            </Modal>
+          </div>
+
           {info.evolutions.map((evo, index) => (
             <div key={index} style={{ marginBottom: 5 }}>
               {evo ? (
@@ -52,8 +80,15 @@ const ReadEvolution = ({ forms, id }) => {
                         <Card.Title>Evolution {index}</Card.Title>
                         <div style={{ display: "flex" }}>
                           <div>
-                            <Button style={{ marginRight: 5 }}>Modifier</Button>
-                            <Button>Supprimer</Button>
+                            <Button
+                              style={{ marginRight: 5 }}
+                              onClick={() => {
+                                handleShow();
+                              }}
+                            >
+                              Modifier
+                            </Button>
+                            <Button onClick={() => {}}>Supprimer</Button>
                           </div>
                           <Accordion.Toggle
                             as={Button}

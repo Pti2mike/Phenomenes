@@ -149,8 +149,6 @@ const AllPhenomenons = ({ forms, setForms, setData }) => {
               variant="primary"
               onClick={() => {
                 handleSubmit();
-
-                // addEvolution();
               }}
             >
               Save Changes
