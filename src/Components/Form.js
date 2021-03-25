@@ -98,7 +98,7 @@ const Form = () => {
   const [form, setForm] = useState({
     // pheno: "",
     // territoire: "",
-    // majoré: "",
+    // majore: "",
     // date: "",
     // douleur: "",
     // mobility: "",
@@ -113,7 +113,6 @@ const Form = () => {
       const response = await axios.get("http://localhost:3000/all-forms");
 
       setData(response.data.form);
-      console.log(response.data.form[2].evolutions[0]);
     } catch (error) {
       alert({ error: error.message });
     }
@@ -141,8 +140,8 @@ const Form = () => {
       setForm({ ...form, pheno: e.target.value });
     } else if (type === "territoire") {
       setForm({ ...form, territoire: e.target.value });
-    } else if (type === "majoré") {
-      setForm({ ...form, majoré: e.target.value });
+    } else if (type === "majore") {
+      setForm({ ...form, majore: e.target.value });
     } else if (type === "date") {
       setForm({ ...form, date: e.target.value });
     } else if (type === "douleur") {
@@ -190,7 +189,7 @@ const Form = () => {
         </select>
 
         <div>Majoré par le mouvement :</div>
-        <select value={form.majoré} onChange={(e) => handleChange(e, "majoré")}>
+        <select value={form.majore} onChange={(e) => handleChange(e, "majore")}>
           {majorated.map((major, index) => (
             <option key={index} value={major}>
               {major}
@@ -242,7 +241,18 @@ const Form = () => {
           />
         </div>
 
-        <input type="submit" value="Ajouter" />
+        <input
+          type="submit"
+          value="Ajouter"
+          style={{
+            backgroundColor: "#0069d9",
+            color: "white",
+            cursor: "pointer",
+            borderRadius: 5,
+            border: "none",
+            padding: 8,
+          }}
+        />
       </form>
 
       <AllPhenomenons forms={data} setForms={setForm} setData={setData} />

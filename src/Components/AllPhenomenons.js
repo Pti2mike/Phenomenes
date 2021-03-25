@@ -3,7 +3,7 @@ import axios from "axios";
 import Evolution from "./Evolution";
 import ReadEvolution from "./ReadEvolution";
 import "./AllPhenomenons.css";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Card, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
@@ -160,7 +160,7 @@ const AllPhenomenons = ({ forms, setForms, setData }) => {
       </div>
       <div
         style={{
-          border: "green solid",
+          // border: "green solid",
           width: 500,
           paddingLeft: 10,
           paddingRight: 10,
@@ -173,58 +173,65 @@ const AllPhenomenons = ({ forms, setForms, setData }) => {
           forms.length > 0 &&
           forms.map((form, index) => {
             return (
-              <div
+              <Card
                 key={index}
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  fontSize: 20,
-                  marginBottom: 10,
+                  // display: "flex",
+                  // flexDirection: "row",
+                  // justifyContent: "space-between",
+                  // alignItems: "center",
+                  // fontSize: 20,
+                  marginBottom: 5,
                   cursor: "pointer",
                 }}
-                className="box-list"
                 // Au survol, affichage des buttons ou non
                 onMouseEnter={(event) => seeButton(event, index)}
                 onMouseLeave={(event) => seeButton(event, null)}
                 onClick={() => {
                   setShowDetails(!showDetails);
                   setSelectedEvolID(form._id);
-                  console.log(form);
                 }}
               >
-                <div>
-                  {form.pheno} - {form.territoire}
-                </div>
-
-                <div
+                <Card.Body
                   style={{
                     display: "flex",
-                    justifyContent: "space-around",
-                    width: 50,
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   }}
                 >
-                  <FontAwesomeIcon
-                    icon={faTrashAlt}
-                    style={{ display: formSelected === index ? "" : "none" }}
-                    onClick={() => {
-                      alert(`Delete ${form.pheno} ${form.territoire} ?`);
+                  <div>
+                    {form.pheno} - {form.territoire}
+                  </div>
 
-                      deleteForm(form._id);
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-around",
+                      width: 50,
                     }}
-                  />
-                  <FontAwesomeIcon
-                    icon={faPlus}
-                    style={{ display: formSelected === index ? "" : "none" }}
-                    onClick={() => {
-                      alert("Open evolution");
+                  >
+                    <FontAwesomeIcon
+                      icon={faTrashAlt}
+                      style={{ display: formSelected === index ? "" : "none" }}
+                      onClick={() => {
+                        alert(`Delete ${form.pheno} ${form.territoire} ?`);
 
-                      handleShow();
-                      setSelectedID(form._id);
-                    }}
-                  />
-                </div>
-              </div>
+                        deleteForm(form._id);
+                      }}
+                    />
+                    <FontAwesomeIcon
+                      icon={faPlus}
+                      style={{ display: formSelected === index ? "" : "none" }}
+                      onClick={() => {
+                        alert("Open evolution");
+
+                        handleShow();
+                        setSelectedID(form._id);
+                      }}
+                    />
+                  </div>
+                </Card.Body>
+              </Card>
             );
           })}
       </div>
