@@ -158,7 +158,6 @@ const AllPhenomenons = ({ forms, setForms, setData }) => {
       </div>
       <div
         style={{
-          // border: "green solid",
           width: 500,
           paddingLeft: 10,
           paddingRight: 10,
@@ -174,11 +173,6 @@ const AllPhenomenons = ({ forms, setForms, setData }) => {
               <Card
                 key={index}
                 style={{
-                  // display: "flex",
-                  // flexDirection: "row",
-                  // justifyContent: "space-between",
-                  // alignItems: "center",
-                  // fontSize: 20,
                   marginBottom: 5,
                   cursor: "pointer",
                 }}
@@ -235,7 +229,12 @@ const AllPhenomenons = ({ forms, setForms, setData }) => {
       </div>
 
       <div style={{ visibility }}>
-        <ReadEvolution forms={forms} id={selectedEvolID} />
+        <ReadEvolution
+          forms={forms}
+          id={selectedEvolID}
+          setForms={setForms}
+          setData={setData}
+        />
       </div>
     </div>
   );

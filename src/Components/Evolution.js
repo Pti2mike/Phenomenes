@@ -28,7 +28,7 @@ const Evolution = ({
         marginBottom: 10,
       }}
     >
-      {/* <h3>Evolution</h3> */}
+      <h3>Evolution</h3>
       <form style={{ marginBottom: 30 }}>
         {/* 1er bloc */}
         <div style={{ marginBottom: 20 }}>

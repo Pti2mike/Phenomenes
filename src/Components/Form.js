@@ -161,7 +161,16 @@ const Form = () => {
     e.preventDefault();
 
     phenoToSave();
-    setForm({});
+    setForm({
+      pheno: "",
+      territoire: "",
+      majore: "",
+      date: "",
+      douleur: "",
+      mobility: "",
+      checkUp: "",
+      precision: "",
+    });
   };
 
   return (

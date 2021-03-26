@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Accordion, Button, Card, Modal } from "react-bootstrap";
 import { format } from "date-fns";
 import Evolution from "./Evolution";
+import axios from "axios";
 
-const ReadEvolution = ({ forms, id }) => {
+const ReadEvolution = ({ forms, id, setForms, setData }) => {
   const [info, setInfo] = useState();
   const [showModal, setShowModal] = useState(false);
-  console.log(info);
+  // console.log(info);
 
   // console.log("forms", forms);
+  // console.log("id", id);
 
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
@@ -24,7 +26,20 @@ const ReadEvolution = ({ forms, id }) => {
     }
   }, [forms, id]);
 
-  // console.log(info.evolutions);
+  // Supprimer une evolution d'un form
+  const deleteEvolution = async (idForm, idEvolution) => {
+    console.log(`evoToDelete ${idForm} ${idEvolution}`); // on récupère l'id du form et l'id de l'evolution concernés
+
+    axios
+      .delete(
+        `http://localhost:3000/form/${idForm}/delete-evolution/${idEvolution}`
+      )
+      .then((response) => {
+        // console.log(response.data.resultat);
+        setInfo(response.data.resultat);
+      })
+      .catch((err) => console.error(err));
+  };
 
   return (
     <div
@@ -37,7 +52,6 @@ const ReadEvolution = ({ forms, id }) => {
     >
       <h3>Evolutions</h3>
 
-      {/* Test Accordion */}
       {info && (
         <>
           <div>
@@ -45,14 +59,15 @@ const ReadEvolution = ({ forms, id }) => {
               <Modal.Header
                 closeButton
                 onClick={() => {
-                  setShowModal();
+                  setShowModal(false);
                 }}
               >
-                <Modal.Title>Modal title</Modal.Title>
+                <Modal.Title>Modifier evolution</Modal.Title>
               </Modal.Header>
 
               <Modal.Body>
-                <p>Modal body text goes here.</p>
+                {/* Vérifier save des modif */}
+                <Evolution />
               </Modal.Body>
 
               <Modal.Footer>
@@ -64,6 +79,7 @@ const ReadEvolution = ({ forms, id }) => {
             </Modal>
           </div>
 
+          {/* Test Accordion */}
           {info.evolutions.map((evo, index) => (
             <div key={index} style={{ marginBottom: 5 }}>
               {evo ? (
@@ -88,7 +104,14 @@ const ReadEvolution = ({ forms, id }) => {
                             >
                               Modifier
                             </Button>
-                            <Button onClick={() => {}}>Supprimer</Button>
+                            <Button
+                              style={{ marginRight: 5 }}
+                              onClick={() => {
+                                deleteEvolution(info._id, evo._id);
+                              }}
+                            >
+                              Supprimer
+                            </Button>
                           </div>
                           <Accordion.Toggle
                             as={Button}
