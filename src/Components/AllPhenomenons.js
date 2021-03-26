@@ -215,8 +215,6 @@ const AllPhenomenons = ({ forms, setForms, setData }) => {
                       icon={faPlus}
                       style={{ display: formSelected === index ? "" : "none" }}
                       onClick={() => {
-                        alert("Open evolution");
-
                         handleShow();
                         setSelectedID(form._id);
                       }}
@@ -234,6 +232,22 @@ const AllPhenomenons = ({ forms, setForms, setData }) => {
           id={selectedEvolID}
           setForms={setForms}
           setData={setData}
+          appartionDate={appartionDate}
+          setAppartionDate={setAppartionDate}
+          unchangedDate={unchangedDate}
+          setUnchangedDate={setUnchangedDate}
+          aggravationDate={aggravationDate}
+          setAggravationDate={setAggravationDate}
+          disappearedDate={disappearedDate}
+          setDisappearedDate={setDisappearedDate}
+          title1={title1}
+          setTitle1={setTitle1}
+          title2={title2}
+          setTitle2={setTitle2}
+          title3={title3}
+          setTitle3={setTitle3}
+          title4={title4}
+          setTitle4={setTitle4}
         />
       </div>
     </div>

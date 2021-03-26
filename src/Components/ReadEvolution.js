@@ -4,10 +4,31 @@ import { format } from "date-fns";
 import Evolution from "./Evolution";
 import axios from "axios";
 
-const ReadEvolution = ({ forms, id, setForms, setData }) => {
-  const [info, setInfo] = useState();
+const ReadEvolution = ({
+  forms,
+  id,
+  setForms,
+  setData,
+  appartionDate,
+  setAppartionDate,
+  unchangedDate,
+  setUnchangedDate,
+  aggravationDate,
+  setAggravationDate,
+  disappearedDate,
+  setDisappearedDate,
+  title1,
+  setTitle1,
+  title2,
+  setTitle2,
+  title3,
+  setTitle3,
+  title4,
+  setTitle4,
+}) => {
+  const [info, setInfo] = useState({});
   const [showModal, setShowModal] = useState(false);
-  // console.log(info);
+  console.log(info);
 
   // console.log("forms", forms);
   // console.log("id", id);
@@ -25,6 +46,30 @@ const ReadEvolution = ({ forms, id, setForms, setData }) => {
       }
     }
   }, [forms, id]);
+
+  // Modifier une evolution d'un form
+
+  const updateEvolution = async (idForm, idEvolution) => {
+    console.log(`evoToDelete ${idForm} ${idEvolution}`); // on récupère l'id du form et l'id de l'evolution concernés
+
+    const response = await axios.post(
+      `http://localhost:3000/form/${idForm}/update-evolution/${idEvolution}`,
+      {
+        appartionDate,
+        unchangedDate,
+        aggravationDate,
+        disappearedDate,
+        title1,
+        title2,
+        title3,
+        title4,
+      }
+    );
+
+    console.log(response);
+    // setInfo(response.data.resultat);
+    setShowModal(false);
+  };
 
   // Supprimer une evolution d'un form
   const deleteEvolution = async (idForm, idEvolution) => {
@@ -44,191 +89,206 @@ const ReadEvolution = ({ forms, id, setForms, setData }) => {
   return (
     <div
       style={{
-        // border: "green solid",
         width: 700,
         paddingLeft: 10,
         paddingRight: 10,
       }}
     >
       <h3>Evolutions</h3>
+      {info &&
+        info.evolutions.map((evo, index) => (
+          <div key={index} style={{ marginBottom: 5 }}>
+            {evo ? (
+              <>
+                <div>
+                  <Modal show={showModal} onHide={handleClose}>
+                    <Modal.Header
+                      closeButton
+                      onClick={() => {
+                        setShowModal(false);
+                      }}
+                    >
+                      <Modal.Title>Modifier évolution</Modal.Title>
+                    </Modal.Header>
 
-      {info && (
-        <>
-          <div>
-            <Modal show={showModal} onHide={handleClose}>
-              <Modal.Header
-                closeButton
-                onClick={() => {
-                  setShowModal(false);
-                }}
-              >
-                <Modal.Title>Modifier evolution</Modal.Title>
-              </Modal.Header>
+                    <Modal.Body>
+                      <Evolution
+                        appartionDate={appartionDate}
+                        setAppartionDate={setAppartionDate}
+                        unchangedDate={unchangedDate}
+                        setUnchangedDate={setUnchangedDate}
+                        aggravationDate={aggravationDate}
+                        setAggravationDate={setAggravationDate}
+                        disappearedDate={disappearedDate}
+                        setDisappearedDate={setDisappearedDate}
+                        title1={title1}
+                        setTitle1={setTitle1}
+                        title2={title2}
+                        setTitle2={setTitle2}
+                        title3={title3}
+                        setTitle3={setTitle3}
+                        title4={title4}
+                        setTitle4={setTitle4}
+                      />
+                    </Modal.Body>
 
-              <Modal.Body>
-                {/* Vérifier save des modif */}
-                <Evolution />
-              </Modal.Body>
-
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                  Close
-                </Button>
-                <Button variant="primary">Save changes</Button>
-              </Modal.Footer>
-            </Modal>
-          </div>
-
-          {/* Test Accordion */}
-          {info.evolutions.map((evo, index) => (
-            <div key={index} style={{ marginBottom: 5 }}>
-              {evo ? (
-                <>
-                  <Accordion>
-                    <Card>
-                      <Card.Header
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
+                    <Modal.Footer>
+                      <Button variant="secondary" onClick={handleClose}>
+                        Close
+                      </Button>
+                      <Button
+                        variant="primary"
+                        onClick={() => {
+                          updateEvolution(info._id, evo._id);
                         }}
                       >
-                        <Card.Title>Evolution {index}</Card.Title>
-                        <div style={{ display: "flex" }}>
-                          <div>
-                            <Button
-                              style={{ marginRight: 5 }}
-                              onClick={() => {
-                                handleShow();
-                              }}
-                            >
-                              Modifier
-                            </Button>
-                            <Button
-                              style={{ marginRight: 5 }}
-                              onClick={() => {
-                                deleteEvolution(info._id, evo._id);
-                              }}
-                            >
-                              Supprimer
-                            </Button>
-                          </div>
-                          <Accordion.Toggle
-                            as={Button}
-                            variant="link"
-                            eventKey="0"
+                        Save changes
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+                </div>
+
+                <Accordion>
+                  <Card>
+                    <Card.Header
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Card.Title>Evolution {index}</Card.Title>
+                      <div style={{ display: "flex" }}>
+                        <div>
+                          <Button
+                            style={{ marginRight: 5 }}
+                            onClick={() => {
+                              // updateEvolution(info._id, evo._id);
+                              handleShow();
+                            }}
                           >
-                            Voir
-                          </Accordion.Toggle>
+                            Modifier
+                          </Button>
+                          <Button
+                            style={{ marginRight: 5 }}
+                            onClick={() => {
+                              deleteEvolution(info._id, evo._id);
+                            }}
+                          >
+                            Supprimer
+                          </Button>
                         </div>
-                      </Card.Header>
-                      <Accordion.Collapse eventKey="0">
-                        <Card.Body>
-                          <div>
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <span>Apparition</span>
-                              {evo.apparation
-                                ? format(new Date(evo.apparation), "dd/MM/yyyy")
-                                : ""}
-                            </div>
-
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <span>Inchangé</span>
-                              {evo.unchanged
-                                ? format(new Date(evo.unchanged), "dd/MM/yyyy")
-                                : ""}
-                            </div>
-
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <span>Title 1</span>
-                              {evo.title1}
-                            </div>
-
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <span>Title 2</span>
-                              {evo.title2}
-                            </div>
+                        <Accordion.Toggle
+                          as={Button}
+                          variant="link"
+                          eventKey="0"
+                        >
+                          Voir
+                        </Accordion.Toggle>
+                      </div>
+                    </Card.Header>
+                    <Accordion.Collapse eventKey="0">
+                      <Card.Body>
+                        <div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <span>Apparition</span>
+                            {evo.apparation
+                              ? format(new Date(evo.apparation), "dd/MM/yyyy")
+                              : ""}
                           </div>
 
-                          {/* 2ème bloc */}
-                          <div style={{ marginBottom: 20 }}>
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <span>Aggravation</span>
-                              {evo.aggravation
-                                ? format(
-                                    new Date(evo.aggravation),
-                                    "dd/MM/yyyy"
-                                  )
-                                : ""}
-                            </div>
-
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <span>Disparition</span>
-                              {evo.disappear
-                                ? format(new Date(evo.disappear), "dd/MM/yyyy")
-                                : ""}
-                            </div>
-
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <span>Title 3</span>
-                              {evo.title3}
-                            </div>
-
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                              }}
-                            >
-                              <span>Title 4</span>
-                              {evo.title4}
-                            </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <span>Inchangé</span>
+                            {evo.unchanged
+                              ? format(new Date(evo.unchanged), "dd/MM/yyyy")
+                              : ""}
                           </div>
-                        </Card.Body>
-                      </Accordion.Collapse>
-                    </Card>
-                  </Accordion>
-                </>
-              ) : null}
-            </div>
-          ))}
-        </>
-      )}
+
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <span>Title 1</span>
+                            {evo.title1}
+                          </div>
+
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <span>Title 2</span>
+                            {evo.title2}
+                          </div>
+                        </div>
+
+                        {/* 2ème bloc */}
+                        <div style={{ marginBottom: 20 }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <span>Aggravation</span>
+                            {evo.aggravation
+                              ? format(new Date(evo.aggravation), "dd/MM/yyyy")
+                              : ""}
+                          </div>
+
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <span>Disparition</span>
+                            {evo.disappear
+                              ? format(new Date(evo.disappear), "dd/MM/yyyy")
+                              : ""}
+                          </div>
+
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <span>Title 3</span>
+                            {evo.title3}
+                          </div>
+
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <span>Title 4</span>
+                            {evo.title4}
+                          </div>
+                        </div>
+                      </Card.Body>
+                    </Accordion.Collapse>
+                  </Card>
+                </Accordion>
+              </>
+            ) : null}
+          </div>
+        ))}
     </div>
   );
 };

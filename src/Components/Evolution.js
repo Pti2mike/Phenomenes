@@ -21,8 +21,6 @@ const Evolution = ({
   return (
     <div
       style={{
-        border: "green solid",
-
         paddingLeft: 10,
         paddingRight: 10,
         marginBottom: 10,
