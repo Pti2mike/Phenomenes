@@ -4,11 +4,10 @@ import { format } from "date-fns";
 import Evolution from "./Evolution";
 import axios from "axios";
 
-const ReadEvolution = ({
-  forms,
-  id,
-  setForms,
+const AllEvolutions = ({
+  data,
   setData,
+  id,
   appartionDate,
   setAppartionDate,
   unchangedDate,
@@ -25,10 +24,11 @@ const ReadEvolution = ({
   setTitle3,
   title4,
   setTitle4,
+  majorated,
 }) => {
-  const [info, setInfo] = useState({});
+  const [info, setInfo] = useState();
   const [showModal, setShowModal] = useState(false);
-  console.log(info);
+  // console.log(info);
 
   // console.log("forms", forms);
   // console.log("id", id);
@@ -37,22 +37,22 @@ const ReadEvolution = ({
   const handleShow = () => setShowModal(true);
 
   useEffect(() => {
-    if (forms) {
-      for (let index = 0; index < forms.length; index++) {
-        // console.log(forms[index]);
-        if (forms[index]._id === id) {
-          setInfo(forms[index]);
+    if (data) {
+      for (let index = 0; index < data.length; index++) {
+        // console.log(data[index]);
+        if (data[index]._id === id) {
+          setInfo(data[index]);
         }
       }
     }
-  }, [forms, id]);
+  }, [data, id]);
 
   // Modifier une evolution d'un form
 
   const updateEvolution = async (idForm, idEvolution) => {
     console.log(`evoToDelete ${idForm} ${idEvolution}`); // on récupère l'id du form et l'id de l'evolution concernés
 
-    const response = await axios.post(
+    const response = await axios.put(
       `http://localhost:3000/form/${idForm}/update-evolution/${idEvolution}`,
       {
         appartionDate,
@@ -66,8 +66,21 @@ const ReadEvolution = ({
       }
     );
 
-    console.log(response);
-    // setInfo(response.data.resultat);
+    // console.log(response);
+
+    setData(
+      data.map((pheno) => {
+        if (pheno._id === idForm) {
+          pheno.evolutions = pheno.evolutions.map((evo) => {
+            if (evo._id === idEvolution) {
+              return response.data.resultat;
+            }
+            return evo;
+          });
+        }
+        return pheno;
+      })
+    );
     setShowModal(false);
   };
 
@@ -293,4 +306,4 @@ const ReadEvolution = ({
   );
 };
 
-export default ReadEvolution;
+export default AllEvolutions;

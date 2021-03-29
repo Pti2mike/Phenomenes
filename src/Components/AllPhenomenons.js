@@ -1,255 +1,290 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Evolution from "./Evolution";
-import ReadEvolution from "./ReadEvolution";
-import "./AllPhenomenons.css";
-import { Button, Card, Modal } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import Phenomenons from "./Phenomenons";
+import { set } from "date-fns";
 
-const AllPhenomenons = ({ forms, setForms, setData }) => {
-  const [showDetails, setShowDetails] = useState(false);
-  const [formSelected, setFormSelected] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [appartionDate, setAppartionDate] = useState("");
-  const [unchangedDate, setUnchangedDate] = useState("");
-  const [aggravationDate, setAggravationDate] = useState("");
-  const [disappearedDate, setDisappearedDate] = useState("");
-  const [title1, setTitle1] = useState("");
-  const [title2, setTitle2] = useState("");
-  const [title3, setTitle3] = useState("");
-  const [title4, setTitle4] = useState("");
-  const [seletedID, setSelectedID] = useState();
-  const [selectedEvolID, setSelectedEvolID] = useState();
+const AllPhenomenons = () => {
+  const phenomenons = [
+    "...",
+    "Douleur",
+    "Courbatures",
+    "Asthénie",
+    "Vertiges",
+    "Paresthésie",
+    "Céphalée",
+    "Autre",
+  ];
 
-  // console.log("props", forms);
+  const territoires = [
+    "...",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C6",
+    "C7",
+    "C8",
+    "T1",
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6",
+    "T7",
+    "T8",
+    "T9",
+    "T10",
+    "T11",
+    "T12",
+    "L1",
+    "L2",
+    "L3",
+    "L4",
+    "L5",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "K1",
+    "K2",
+    "K3",
+    "K4",
+    "K5",
+    "K6",
+    "K7",
+    "K8",
+    "K9",
+    "K10",
+    "K11",
+    "K12",
+    "Tête",
+    "Crane",
+    "Face",
+    "Cou",
+    "Epaule",
+    "Bras",
+    "Coude",
+    "Avant-bras",
+    "Poignet",
+    "Main",
+    "Thorax",
+    "Abdomen",
+    "Epigastre",
+    "Hypochondre",
+    "Flanc",
+    "Région péri ombilicale",
+    "Fosse iliaque",
+    "Hypogastre",
+    "Lombes",
+    "Fesse",
+    "Coccyx",
+    "Périnée",
+    "Région génitale",
+    "Région annale",
+    "Hanche",
+    "Cuisse",
+    "Genou",
+    "Jambe",
+    "Cheville",
+    "Pied",
+  ];
 
-  const handleClose = () => setShowModal(false);
-  const handleShow = () => setShowModal(true);
-  // console.log("formSlected", formSelected);
-  // console.log("forms", data);
+  const majorated = ["...", "oui", "non"];
 
-  // Test Hover
-  const seeButton = (event, index) => {
-    event.preventDefault();
-    setFormSelected(index);
-  };
+  const mobilities = ["...", "oui", "non"];
 
-  // Test visibilité
-  const visibility = selectedEvolID ? "visible" : "hidden";
+  const checkUp = ["...", "Absent", "Bénin"];
 
-  // Supprimer un form
-  const deleteForm = async (id) => {
-    // console.log(id); // on récupère l'id du form concerné
+  const [data, setData] = useState();
+  const [form, setForm] = useState({
+    // pheno: "",
+    // territoire: "",
+    // majore: "",
+    // date: "",
+    // douleur: "",
+    // mobility: "",
+    // checkUp: "",
+    // precision: "",
+  });
+
+  // Get all data from database
+
+  const fetchData = async () => {
     try {
-      const response = await axios.post(`http://localhost:3000/delete-form`, {
-        id,
-      });
-      if (response.data.message === "Deleted") {
-        setData(response.data.resultat);
-      }
-      console.log("deleteForm", response);
+      const response = await axios.get("http://localhost:3000/all-forms");
+
+      setData(response.data.form);
     } catch (error) {
       alert({ error: error.message });
     }
   };
 
-  const handleSubmit = async () => {
-    if (
-      appartionDate !== "" ||
-      unchangedDate !== "" ||
-      aggravationDate !== "" ||
-      disappearedDate !== "" ||
-      title1 !== "" ||
-      title2 !== "" ||
-      title3 !== "" ||
-      title4 !== ""
-    ) {
-      const response = await axios.post(
-        `http://localhost:3000/add-evolution/${seletedID}`,
-        {
-          appartionDate,
-          unchangedDate,
-          aggravationDate,
-          disappearedDate,
-          title1,
-          title2,
-          title3,
-          title4,
-        }
-      );
-      // setData(response.data.resultat);
-      setData([
-        ...forms.map((row) => {
-          if (row._id === seletedID) {
-            row.evolutions.push(response.data.resultat);
-          }
-          return row;
-        }),
-      ]);
-      setAppartionDate("");
-      setUnchangedDate("");
-      setAggravationDate("");
-      setDisappearedDate("");
-      setTitle1("");
-      setTitle2("");
-      setTitle3("");
-      setTitle4("");
-      handleClose();
-    } else {
-      alert("Merci de remplir un champ");
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Phénomènes à save
+
+  const phenoToSave = async () => {
+    try {
+      const response = await axios.post("http://localhost:3000/add-form", form);
+
+      setData(response.data.resultat);
+    } catch (error) {
+      alert({ error: error.message });
     }
   };
 
+  // Modification du form TEST switch
+
+  const handleChange = (event, type) => {
+    switch (type) {
+      case "pheno":
+        setForm({ ...form, pheno: event.target.value });
+        break;
+      case "territoire":
+        setForm({ ...form, territoire: event.target.value });
+        break;
+      case "majore":
+        setForm({ ...form, majore: event.target.value });
+        break;
+      case "date":
+        setForm({ ...form, date: event.target.value });
+        break;
+      case "douleur":
+        setForm({ ...form, douleur: event.target.value });
+        break;
+      case "mobility":
+        setForm({ ...form, mobility: event.target.value });
+        break;
+      case "checkUp":
+        setForm({ ...form, checkUp: event.target.value });
+        break;
+      case "precision":
+        setForm({ ...form, precision: event.target.value });
+        break;
+      default:
+        console.log("Type non trouvé");
+        break;
+    }
+  };
+
+  // Validation du form
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    phenoToSave();
+    setForm({
+      pheno: "",
+      territoire: "",
+      majore: "",
+      date: "",
+      douleur: "",
+      mobility: "",
+      checkUp: "",
+      precision: "",
+    });
+  };
+
   return (
-    <div
-      style={{
-        display: "flex",
-        border: "solid gray",
-        justifyContent: "space-around",
-      }}
-    >
-      <div>
-        <Modal show={showModal} onHide={handleClose}>
-          <Modal.Header
-            // closeButton
-            style={{
-              display: "flex",
-              // justifyContent: "center",
+    <div>
+      <form style={{ marginBottom: 20 }} onSubmit={handleSubmit}>
+        <div>Nom du phénomène :</div>
+        <select value={form.pheno} onChange={(e) => handleChange(e, "pheno")}>
+          {phenomenons.map((pheno, index) => (
+            <option key={index} value={pheno}>
+              {pheno}
+            </option>
+          ))}
+        </select>
 
-              alignItems: "center",
-            }}
-          ></Modal.Header>
-          <Modal.Body>
-            <Evolution
-              appartionDate={appartionDate}
-              setAppartionDate={setAppartionDate}
-              unchangedDate={unchangedDate}
-              setUnchangedDate={setUnchangedDate}
-              aggravationDate={aggravationDate}
-              setAggravationDate={setAggravationDate}
-              disappearedDate={disappearedDate}
-              setDisappearedDate={setDisappearedDate}
-              title1={title1}
-              setTitle1={setTitle1}
-              title2={title2}
-              setTitle2={setTitle2}
-              title3={title3}
-              setTitle3={setTitle3}
-              title4={title4}
-              setTitle4={setTitle4}
-              seletedID={seletedID}
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => {
-                handleSubmit();
-              }}
-            >
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
-      <div
-        style={{
-          width: 500,
-          paddingLeft: 10,
-          paddingRight: 10,
-        }}
-      >
-        <h3>Tous les Phénomènes</h3>
-        {/* Afficher la liste des phénomènes */}
+        <div>Territoire :</div>
+        <select
+          value={form.territoire}
+          onChange={(e) => handleChange(e, "territoire")}
+        >
+          {territoires.map((territoire, index) => (
+            <option key={index} value={territoire}>
+              {territoire}
+            </option>
+          ))}
+        </select>
 
-        {forms &&
-          forms.length > 0 &&
-          forms.map((form, index) => {
-            return (
-              <Card
-                key={index}
-                style={{
-                  marginBottom: 5,
-                  cursor: "pointer",
-                }}
-                // Au survol, affichage des buttons ou non
-                onMouseEnter={(event) => seeButton(event, index)}
-                onMouseLeave={(event) => seeButton(event, null)}
-                onClick={() => {
-                  setShowDetails(!showDetails);
-                  setSelectedEvolID(form._id);
-                }}
-              >
-                <Card.Body
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <div>
-                    {form.pheno} - {form.territoire}
-                  </div>
+        <div>Majoré par le mouvement :</div>
+        <select value={form.majore} onChange={(e) => handleChange(e, "majore")}>
+          {majorated.map((major, index) => (
+            <option key={index} value={major}>
+              {major}
+            </option>
+          ))}
+        </select>
 
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-around",
-                      width: 50,
-                    }}
-                  >
-                    <FontAwesomeIcon
-                      icon={faTrashAlt}
-                      style={{ display: formSelected === index ? "" : "none" }}
-                      onClick={() => {
-                        alert(`Delete ${form.pheno} ${form.territoire} ?`);
+        <div>
+          <div>Date :</div>
+          <input
+            type="date"
+            value={form.date}
+            onChange={(e) => handleChange(e, "date")}
+          />
+        </div>
 
-                        deleteForm(form._id);
-                      }}
-                    />
-                    <FontAwesomeIcon
-                      icon={faPlus}
-                      style={{ display: formSelected === index ? "" : "none" }}
-                      onClick={() => {
-                        handleShow();
-                        setSelectedID(form._id);
-                      }}
-                    />
-                  </div>
-                </Card.Body>
-              </Card>
-            );
-          })}
-      </div>
+        {/* Insérer le niveau de douleur */}
 
-      <div style={{ visibility }}>
-        <ReadEvolution
-          forms={forms}
-          id={selectedEvolID}
-          setForms={setForms}
-          setData={setData}
-          appartionDate={appartionDate}
-          setAppartionDate={setAppartionDate}
-          unchangedDate={unchangedDate}
-          setUnchangedDate={setUnchangedDate}
-          aggravationDate={aggravationDate}
-          setAggravationDate={setAggravationDate}
-          disappearedDate={disappearedDate}
-          setDisappearedDate={setDisappearedDate}
-          title1={title1}
-          setTitle1={setTitle1}
-          title2={title2}
-          setTitle2={setTitle2}
-          title3={title3}
-          setTitle3={setTitle3}
-          title4={title4}
-          setTitle4={setTitle4}
+        <div>Mobilité globale restreinte :</div>
+        <select
+          value={form.mobility}
+          onChange={(e) => handleChange(e, "mobility")}
+        >
+          {mobilities.map((mobility, index) => (
+            <option key={index} value={mobility}>
+              {mobility}
+            </option>
+          ))}
+        </select>
+
+        <div>Bilan Médical :</div>
+        <select
+          value={form.checkUp}
+          onChange={(e) => handleChange(e, "checkUp")}
+        >
+          {checkUp.map((check, index) => (
+            <option key={index} value={check}>
+              {check}
+            </option>
+          ))}
+        </select>
+
+        <div>
+          <div>Précision :</div>
+          <textarea
+            value={form.precision}
+            placeholder="Votre texte ici..."
+            onChange={(e) => handleChange(e, "precision")}
+          />
+        </div>
+
+        <input
+          type="submit"
+          value="Ajouter"
+          style={{
+            backgroundColor: "#0069d9",
+            color: "white",
+            cursor: "pointer",
+            borderRadius: 5,
+            border: "none",
+            padding: 8,
+          }}
         />
-      </div>
+      </form>
+
+      <Phenomenons
+        data={data}
+        setData={setData}
+        majorated={majorated}
+        mobilities={mobilities}
+        checkUp={checkUp}
+      />
     </div>
   );
 };

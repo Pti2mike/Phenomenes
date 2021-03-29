@@ -1,13 +1,13 @@
 import React from "react";
-import Form from "../Components/Form";
+import AllPhenomenons from "../Components/AllPhenomenons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faSave } from "@fortawesome/free-solid-svg-icons";
-import "./FormCard.css";
+import "./PhenomenonCard.css";
 
-const FormCard = () => {
+const PhenomenonCard = () => {
   return (
     <div className="wrapper">
-      <Form />
+      <AllPhenomenons />
 
       <div className="card-footer">
         <div
@@ -34,4 +34,4 @@ const FormCard = () => {
   );
 };
 
-export default FormCard;
+export default PhenomenonCard;

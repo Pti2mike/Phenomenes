@@ -1,8 +1,8 @@
 import React from "react";
 
 const Evolution = ({
-  appartionDate,
-  setAppartionDate,
+  apparitionDate,
+  setApparitionDate,
   unchangedDate,
   setUnchangedDate,
   aggravationDate,
@@ -17,6 +17,9 @@ const Evolution = ({
   setTitle3,
   title4,
   setTitle4,
+  majorated,
+  mobilities,
+  checkUp,
 }) => {
   return (
     <div
@@ -34,10 +37,10 @@ const Evolution = ({
             <span>Apparition</span>
             <input
               type="date"
-              value={appartionDate}
+              value={apparitionDate}
               onChange={(event) => {
                 // console.log("Date selectionnée");
-                setAppartionDate(event.target.value);
+                setApparitionDate(event.target.value);
               }}
             />
           </div>
@@ -121,6 +124,69 @@ const Evolution = ({
               }}
             />
           </div>
+
+          {/* <div>
+            <label>Evolution : </label>
+            <select name="title">
+              <option value="...">...</option>
+              <option value="Apparition">Apparition</option>
+              <option value="Inchangé">Inchangé</option>
+              <option value="Aggravation">Aggravation</option>
+              <option value="Disparition">Disparition</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Majoré par le mouvement : </label>
+            {majorated && (
+              <select value={majorated} onChange={() => {}}>
+                {majorated.map((major, index) => (
+                  <option key={index} value={major}>
+                    {major}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+
+          <div>
+            <label>Date :</label>
+            <input type="date" value="" onChange={() => {}} />
+          </div>
+                */}
+
+          {/* Insérer le niveau de douleur */}
+          {/*
+          <div>
+            <label>Mobilité globale restreinte : </label>
+            <select value="" onChange={() => {}}>
+              {mobilities.map((mobility, index) => (
+                <option key={index} value={mobility}>
+                  {mobility}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label>Bilan Médical :</label>
+            <select value="" onChange={() => {}}>
+              {checkUp.map((check, index) => (
+                <option key={index} value={check}>
+                  {check}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label>Précision :</label>
+            <textarea
+              value=""
+              placeholder="Votre texte ici..."
+              onChange={() => {}}
+            />
+          </div> */}
         </div>
       </form>
     </div>

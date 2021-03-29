@@ -1,12 +1,12 @@
 import React from "react";
-import FormCard from "./Containers/FormCard";
+import PhenomenonCard from "./Containers/PhenomenonCard";
 import "./App.css";
 
 const App = () => {
   return (
     <div className="App">
       <h1>Phénomènes indésirables</h1>
-      <FormCard />
+      <PhenomenonCard />
     </div>
   );
 };
