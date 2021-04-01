@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Phenomenons from "./Phenomenons";
+import PainBar from "./PainBar";
 import { set } from "date-fns";
 
 const AllPhenomenons = () => {
@@ -95,25 +96,17 @@ const AllPhenomenons = () => {
 
   const checkUp = ["...", "Absent", "Bénin"];
 
-  const [data, setData] = useState();
-  const [form, setForm] = useState({
-    // pheno: "",
-    // territoire: "",
-    // majore: "",
-    // date: "",
-    // douleur: "",
-    // mobility: "",
-    // checkUp: "",
-    // precision: "",
-  });
+  const [data, setData] = useState({});
+  const [form, setForm] = useState({});
+  const [pain, setPain] = useState(2);
 
   // Get all data from database
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/all-forms");
+      const response = await axios.get("http://localhost:3000/all-phenomenons");
 
-      setData(response.data.form);
+      setData(response.data.phenomenons);
     } catch (error) {
       alert({ error: error.message });
     }
@@ -127,7 +120,10 @@ const AllPhenomenons = () => {
 
   const phenoToSave = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/add-form", form);
+      const response = await axios.post(
+        "http://localhost:3000/add-phenomenon",
+        data
+      );
 
       setData(response.data.resultat);
     } catch (error) {
@@ -135,33 +131,37 @@ const AllPhenomenons = () => {
     }
   };
 
-  // Modification du form TEST switch
+  const onChangePain = (event) => {
+    setPain(event.target.value);
+  };
+
+  // Modification du phénomène TEST switch
 
   const handleChange = (event, type) => {
     switch (type) {
       case "pheno":
-        setForm({ ...form, pheno: event.target.value });
+        setData({ ...data, pheno: event.target.value });
         break;
       case "territoire":
-        setForm({ ...form, territoire: event.target.value });
+        setData({ ...data, territoire: event.target.value });
         break;
       case "majore":
-        setForm({ ...form, majore: event.target.value });
+        setData({ ...data, majore: event.target.value });
         break;
       case "date":
-        setForm({ ...form, date: event.target.value });
+        setData({ ...data, date: event.target.value });
         break;
       case "douleur":
-        setForm({ ...form, douleur: event.target.value });
+        setData({ ...data, douleur: event.target.value });
         break;
       case "mobility":
-        setForm({ ...form, mobility: event.target.value });
+        setData({ ...data, mobility: event.target.value });
         break;
       case "checkUp":
-        setForm({ ...form, checkUp: event.target.value });
+        setData({ ...data, checkUp: event.target.value });
         break;
       case "precision":
-        setForm({ ...form, precision: event.target.value });
+        setData({ ...data, precision: event.target.value });
         break;
       default:
         console.log("Type non trouvé");
@@ -169,18 +169,18 @@ const AllPhenomenons = () => {
     }
   };
 
-  // Validation du form
+  // Validation du phénomène
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     phenoToSave();
-    setForm({
+    setData({
       pheno: "",
       territoire: "",
       majore: "",
       date: "",
-      douleur: "",
+      douleur: 1,
       mobility: "",
       checkUp: "",
       precision: "",
@@ -191,7 +191,7 @@ const AllPhenomenons = () => {
     <div>
       <form style={{ marginBottom: 20 }} onSubmit={handleSubmit}>
         <div>Nom du phénomène :</div>
-        <select value={form.pheno} onChange={(e) => handleChange(e, "pheno")}>
+        <select value={data.pheno} onChange={(e) => handleChange(e, "pheno")}>
           {phenomenons.map((pheno, index) => (
             <option key={index} value={pheno}>
               {pheno}
@@ -201,7 +201,7 @@ const AllPhenomenons = () => {
 
         <div>Territoire :</div>
         <select
-          value={form.territoire}
+          value={data.territoire}
           onChange={(e) => handleChange(e, "territoire")}
         >
           {territoires.map((territoire, index) => (
@@ -212,7 +212,7 @@ const AllPhenomenons = () => {
         </select>
 
         <div>Majoré par le mouvement :</div>
-        <select value={form.majore} onChange={(e) => handleChange(e, "majore")}>
+        <select value={data.majore} onChange={(e) => handleChange(e, "majore")}>
           {majorated.map((major, index) => (
             <option key={index} value={major}>
               {major}
@@ -224,16 +224,18 @@ const AllPhenomenons = () => {
           <div>Date :</div>
           <input
             type="date"
-            value={form.date}
+            value={data.date}
             onChange={(e) => handleChange(e, "date")}
           />
         </div>
 
-        {/* Insérer le niveau de douleur */}
+        <div>
+          <PainBar pain={pain} setPain={setPain} handleChange={handleChange} />
+        </div>
 
         <div>Mobilité globale restreinte :</div>
         <select
-          value={form.mobility}
+          value={data.mobility}
           onChange={(e) => handleChange(e, "mobility")}
         >
           {mobilities.map((mobility, index) => (
@@ -245,7 +247,7 @@ const AllPhenomenons = () => {
 
         <div>Bilan Médical :</div>
         <select
-          value={form.checkUp}
+          value={data.checkUp}
           onChange={(e) => handleChange(e, "checkUp")}
         >
           {checkUp.map((check, index) => (
@@ -258,7 +260,7 @@ const AllPhenomenons = () => {
         <div>
           <div>Précision :</div>
           <textarea
-            value={form.precision}
+            value={data.precision}
             placeholder="Votre texte ici..."
             onChange={(e) => handleChange(e, "precision")}
           />
@@ -278,13 +280,7 @@ const AllPhenomenons = () => {
         />
       </form>
 
-      <Phenomenons
-        data={data}
-        setData={setData}
-        majorated={majorated}
-        mobilities={mobilities}
-        checkUp={checkUp}
-      />
+      <Phenomenons data={data} setData={setData} />
     </div>
   );
 };

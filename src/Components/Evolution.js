@@ -1,26 +1,103 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { Button } from "react-bootstrap";
 
-const Evolution = ({
-  apparitionDate,
-  setApparitionDate,
-  unchangedDate,
-  setUnchangedDate,
-  aggravationDate,
-  setAggravationDate,
-  disappearedDate,
-  setDisappearedDate,
-  title1,
-  setTitle1,
-  title2,
-  setTitle2,
-  title3,
-  setTitle3,
-  title4,
-  setTitle4,
-  majorated,
-  mobilities,
-  checkUp,
-}) => {
+const Evolution = ({ data, setData, evolution, pheno }) => {
+  const [apparitionDate, setApparitionDate] = useState("");
+  const [unchangedDate, setUnchangedDate] = useState("");
+  const [aggravationDate, setAggravationDate] = useState("");
+  const [disappearedDate, setDisappearedDate] = useState("");
+  const [title1, setTitle1] = useState("");
+  const [title2, setTitle2] = useState("");
+  const [title3, setTitle3] = useState("");
+  const [title4, setTitle4] = useState("");
+
+  // Soumettre les modifications d'une évolution
+  const handleSubmit = async () => {
+    if (
+      apparitionDate !== "" ||
+      unchangedDate !== "" ||
+      aggravationDate !== "" ||
+      disappearedDate !== "" ||
+      title1 !== "" ||
+      title2 !== "" ||
+      title3 !== "" ||
+      title4 !== ""
+    ) {
+      const response = await axios.post(
+        // `http://localhost:3000/add-evolution/${selectedID}`,
+        `http://localhost:3000/add-evolution/${evolution._id}`,
+        {
+          apparitionDate,
+          unchangedDate,
+          aggravationDate,
+          disappearedDate,
+          title1,
+          title2,
+          title3,
+          title4,
+        }
+      );
+      // setData(response.data.resultat);
+      setData([
+        ...data.map((row) => {
+          // if (row._id === selectedID) {
+          if (row._id === evolution._id) {
+            row.evolutions.push(response.data.resultat);
+          }
+          return row;
+        }),
+      ]);
+      setApparitionDate("");
+      setUnchangedDate("");
+      setAggravationDate("");
+      setDisappearedDate("");
+      setTitle1("");
+      setTitle2("");
+      setTitle3("");
+      setTitle4("");
+      // handleClose();
+    } else {
+      alert("Merci de remplir un champ");
+    }
+  };
+
+  // Modifier une evolution d'un form
+
+  const updateEvolution = async (idForm, idEvolution) => {
+    console.log(`evoToDelete ${idForm} ${idEvolution}`); // on récupère l'id du form et l'id de l'evolution concernés
+
+    const response = await axios.put(
+      `http://localhost:3000/form/${idForm}/update-evolution/${idEvolution}`,
+      {
+        apparitionDate,
+        unchangedDate,
+        aggravationDate,
+        disappearedDate,
+        title1,
+        title2,
+        title3,
+        title4,
+      }
+    );
+
+    // console.log(response);
+
+    setData(
+      data.map((pheno) => {
+        if (pheno._id === idForm) {
+          pheno.evolutions = pheno.evolutions.map((evo) => {
+            if (evo._id === idEvolution) {
+              return response.data.resultat;
+            }
+            return evo;
+          });
+        }
+        return pheno;
+      })
+    );
+  };
+
   return (
     <div
       style={{
@@ -79,7 +156,6 @@ const Evolution = ({
           </div>
         </div>
 
-        {/* 2ème bloc */}
         <div style={{ marginBottom: 20 }}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <span>Aggravation</span>
@@ -124,69 +200,7 @@ const Evolution = ({
               }}
             />
           </div>
-
-          {/* <div>
-            <label>Evolution : </label>
-            <select name="title">
-              <option value="...">...</option>
-              <option value="Apparition">Apparition</option>
-              <option value="Inchangé">Inchangé</option>
-              <option value="Aggravation">Aggravation</option>
-              <option value="Disparition">Disparition</option>
-            </select>
-          </div>
-
-          <div>
-            <label>Majoré par le mouvement : </label>
-            {majorated && (
-              <select value={majorated} onChange={() => {}}>
-                {majorated.map((major, index) => (
-                  <option key={index} value={major}>
-                    {major}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-
-          <div>
-            <label>Date :</label>
-            <input type="date" value="" onChange={() => {}} />
-          </div>
-                */}
-
-          {/* Insérer le niveau de douleur */}
-          {/*
-          <div>
-            <label>Mobilité globale restreinte : </label>
-            <select value="" onChange={() => {}}>
-              {mobilities.map((mobility, index) => (
-                <option key={index} value={mobility}>
-                  {mobility}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label>Bilan Médical :</label>
-            <select value="" onChange={() => {}}>
-              {checkUp.map((check, index) => (
-                <option key={index} value={check}>
-                  {check}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label>Précision :</label>
-            <textarea
-              value=""
-              placeholder="Votre texte ici..."
-              onChange={() => {}}
-            />
-          </div> */}
+          <Button onSubmit={handleSubmit}>Sauvegarder</Button>
         </div>
       </form>
     </div>

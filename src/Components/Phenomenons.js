@@ -3,31 +3,20 @@ import axios from "axios";
 import Evolution from "./Evolution";
 import AllEvolutions from "./AllEvolutions";
 import "./Phenomenons.css";
-import { Button, Card, Modal } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
-const Phenomenons = ({ data, setData, majorated, mobilities, checkUp }) => {
+const Phenomenons = ({ data, setData }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [phenoSelected, setPhenoSelected] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [apparitionDate, setApparitionDate] = useState("");
-  const [unchangedDate, setUnchangedDate] = useState("");
-  const [aggravationDate, setAggravationDate] = useState("");
-  const [disappearedDate, setDisappearedDate] = useState("");
-  const [title1, setTitle1] = useState("");
-  const [title2, setTitle2] = useState("");
-  const [title3, setTitle3] = useState("");
-  const [title4, setTitle4] = useState("");
   const [selectedID, setSelectedID] = useState();
-  const [selectedEvolID, setSelectedEvolID] = useState();
+  const [selectedEvolID, setSelectedEvolID] = useState({});
 
-  // console.log("props", data);
-
-  const handleClose = () => setShowModal(false);
-  const handleShow = () => setShowModal(true);
-  // console.log("phenoSelected", PhenoSelected);
+  // console.log("phenoSelected", phenoSelected);
   // console.log("Phénomènes", data);
+  console.log("selectedEvolID", selectedEvolID);
+  console.log("selectedID", selectedID);
 
   // Hover
   const seeButton = (event, index) => {
@@ -36,7 +25,7 @@ const Phenomenons = ({ data, setData, majorated, mobilities, checkUp }) => {
   };
 
   // Visibilité section all Evolutions
-  const visibility = selectedEvolID ? "visible" : "hidden";
+  const visibility = selectedEvolID._id ? "visible" : "hidden";
 
   // Supprimer un form
   const deleteForm = async (id) => {
@@ -54,54 +43,6 @@ const Phenomenons = ({ data, setData, majorated, mobilities, checkUp }) => {
     }
   };
 
-  // Soumettre les modifications d'une évolution
-  const handleSubmit = async () => {
-    if (
-      apparitionDate !== "" ||
-      unchangedDate !== "" ||
-      aggravationDate !== "" ||
-      disappearedDate !== "" ||
-      title1 !== "" ||
-      title2 !== "" ||
-      title3 !== "" ||
-      title4 !== ""
-    ) {
-      const response = await axios.post(
-        `http://localhost:3000/add-evolution/${selectedID}`,
-        {
-          apparitionDate,
-          unchangedDate,
-          aggravationDate,
-          disappearedDate,
-          title1,
-          title2,
-          title3,
-          title4,
-        }
-      );
-      // setData(response.data.resultat);
-      setData([
-        ...data.map((row) => {
-          if (row._id === selectedID) {
-            row.evolutions.push(response.data.resultat);
-          }
-          return row;
-        }),
-      ]);
-      setApparitionDate("");
-      setUnchangedDate("");
-      setAggravationDate("");
-      setDisappearedDate("");
-      setTitle1("");
-      setTitle2("");
-      setTitle3("");
-      setTitle4("");
-      handleClose();
-    } else {
-      alert("Merci de remplir un champ");
-    }
-  };
-
   return (
     <div
       style={{
@@ -111,62 +52,6 @@ const Phenomenons = ({ data, setData, majorated, mobilities, checkUp }) => {
       }}
     >
       <div>
-        <Modal show={showModal} onHide={handleClose}>
-          <Modal.Header
-            // closeButton
-            style={{
-              display: "flex",
-              // justifyContent: "center",
-
-              alignItems: "center",
-            }}
-          ></Modal.Header>
-          <Modal.Body>
-            <Evolution
-              apparitionDate={apparitionDate}
-              setApparitionDate={setApparitionDate}
-              unchangedDate={unchangedDate}
-              setUnchangedDate={setUnchangedDate}
-              aggravationDate={aggravationDate}
-              setAggravationDate={setAggravationDate}
-              disappearedDate={disappearedDate}
-              setDisappearedDate={setDisappearedDate}
-              title1={title1}
-              setTitle1={setTitle1}
-              title2={title2}
-              setTitle2={setTitle2}
-              title3={title3}
-              setTitle3={setTitle3}
-              title4={title4}
-              setTitle4={setTitle4}
-              selectedID={selectedID}
-              majorated={majorated}
-              mobilities={mobilities}
-              checkUp={checkUp}
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Fermer
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => {
-                handleSubmit();
-              }}
-            >
-              Sauvegarder Modifications
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
-      <div
-        style={{
-          width: 500,
-          paddingLeft: 10,
-          paddingRight: 10,
-        }}
-      >
         <h3>Phénomènes</h3>
         {/* Afficher la liste des phénomènes */}
 
@@ -185,7 +70,7 @@ const Phenomenons = ({ data, setData, majorated, mobilities, checkUp }) => {
                 onMouseLeave={(event) => seeButton(event, null)}
                 onClick={() => {
                   setShowDetails(!showDetails);
-                  setSelectedEvolID(form._id);
+                  setSelectedEvolID(form);
                 }}
               >
                 <Card.Body
@@ -219,7 +104,7 @@ const Phenomenons = ({ data, setData, majorated, mobilities, checkUp }) => {
                       icon={faPlus}
                       style={{ display: phenoSelected === index ? "" : "none" }}
                       onClick={() => {
-                        handleShow();
+                        // handleShow();
                         setSelectedID(form._id);
                       }}
                     />
@@ -231,30 +116,7 @@ const Phenomenons = ({ data, setData, majorated, mobilities, checkUp }) => {
       </div>
 
       <div style={{ visibility }}>
-        <AllEvolutions
-          data={data}
-          id={selectedEvolID}
-          setData={setData}
-          apparitionDate={apparitionDate}
-          setApparitionDate={setApparitionDate}
-          unchangedDate={unchangedDate}
-          setUnchangedDate={setUnchangedDate}
-          aggravationDate={aggravationDate}
-          setAggravationDate={setAggravationDate}
-          disappearedDate={disappearedDate}
-          setDisappearedDate={setDisappearedDate}
-          title1={title1}
-          setTitle1={setTitle1}
-          title2={title2}
-          setTitle2={setTitle2}
-          title3={title3}
-          setTitle3={setTitle3}
-          title4={title4}
-          setTitle4={setTitle4}
-          majorated={majorated}
-          mobilities={mobilities}
-          checkUp={checkUp}
-        />
+        <AllEvolutions data={data} pheno={selectedEvolID} setData={setData} />
       </div>
     </div>
   );
