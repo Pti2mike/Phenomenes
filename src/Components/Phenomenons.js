@@ -106,6 +106,7 @@ const Phenomenons = ({ data, setData }) => {
                       onClick={() => {
                         // handleShow();
                         setSelectedID(form._id);
+                        alert("Voulez-vous ajouter une evolution ?");
                       }}
                     />
                   </div>

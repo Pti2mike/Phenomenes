@@ -98,7 +98,7 @@ const AllPhenomenons = () => {
 
   const [data, setData] = useState({});
   const [form, setForm] = useState({});
-  const [pain, setPain] = useState(2);
+  const [pain, setPain] = useState(1);
 
   // Get all data from database
 
@@ -122,17 +122,13 @@ const AllPhenomenons = () => {
     try {
       const response = await axios.post(
         "http://localhost:3000/add-phenomenon",
-        data
+        form
       );
-
+      console.log(response);
       setData(response.data.resultat);
     } catch (error) {
       alert({ error: error.message });
     }
-  };
-
-  const onChangePain = (event) => {
-    setPain(event.target.value);
   };
 
   // Modification du phénomène TEST switch
@@ -140,28 +136,28 @@ const AllPhenomenons = () => {
   const handleChange = (event, type) => {
     switch (type) {
       case "pheno":
-        setData({ ...data, pheno: event.target.value });
+        setForm({ ...form, pheno: event.target.value });
         break;
       case "territoire":
-        setData({ ...data, territoire: event.target.value });
+        setForm({ ...form, territoire: event.target.value });
         break;
       case "majore":
-        setData({ ...data, majore: event.target.value });
+        setForm({ ...form, majore: event.target.value });
         break;
       case "date":
-        setData({ ...data, date: event.target.value });
+        setForm({ ...form, date: event.target.value });
         break;
       case "douleur":
-        setData({ ...data, douleur: event.target.value });
+        setForm({ ...form, douleur: event.target.value });
         break;
       case "mobility":
-        setData({ ...data, mobility: event.target.value });
+        setForm({ ...form, mobility: event.target.value });
         break;
       case "checkUp":
-        setData({ ...data, checkUp: event.target.value });
+        setForm({ ...form, checkUp: event.target.value });
         break;
       case "precision":
-        setData({ ...data, precision: event.target.value });
+        setForm({ ...form, precision: event.target.value });
         break;
       default:
         console.log("Type non trouvé");
@@ -175,7 +171,7 @@ const AllPhenomenons = () => {
     e.preventDefault();
 
     phenoToSave();
-    setData({
+    setForm({
       pheno: "",
       territoire: "",
       majore: "",
@@ -191,7 +187,7 @@ const AllPhenomenons = () => {
     <div>
       <form style={{ marginBottom: 20 }} onSubmit={handleSubmit}>
         <div>Nom du phénomène :</div>
-        <select value={data.pheno} onChange={(e) => handleChange(e, "pheno")}>
+        <select value={form.pheno} onChange={(e) => handleChange(e, "pheno")}>
           {phenomenons.map((pheno, index) => (
             <option key={index} value={pheno}>
               {pheno}
@@ -201,7 +197,7 @@ const AllPhenomenons = () => {
 
         <div>Territoire :</div>
         <select
-          value={data.territoire}
+          value={form.territoire}
           onChange={(e) => handleChange(e, "territoire")}
         >
           {territoires.map((territoire, index) => (
@@ -212,7 +208,7 @@ const AllPhenomenons = () => {
         </select>
 
         <div>Majoré par le mouvement :</div>
-        <select value={data.majore} onChange={(e) => handleChange(e, "majore")}>
+        <select value={form.majore} onChange={(e) => handleChange(e, "majore")}>
           {majorated.map((major, index) => (
             <option key={index} value={major}>
               {major}
@@ -224,18 +220,18 @@ const AllPhenomenons = () => {
           <div>Date :</div>
           <input
             type="date"
-            value={data.date}
+            value={form.date}
             onChange={(e) => handleChange(e, "date")}
           />
         </div>
 
         <div>
-          <PainBar pain={pain} setPain={setPain} handleChange={handleChange} />
+          <PainBar form={form} pain={pain} handleChange={handleChange} />
         </div>
 
         <div>Mobilité globale restreinte :</div>
         <select
-          value={data.mobility}
+          value={form.mobility}
           onChange={(e) => handleChange(e, "mobility")}
         >
           {mobilities.map((mobility, index) => (
@@ -247,7 +243,7 @@ const AllPhenomenons = () => {
 
         <div>Bilan Médical :</div>
         <select
-          value={data.checkUp}
+          value={form.checkUp}
           onChange={(e) => handleChange(e, "checkUp")}
         >
           {checkUp.map((check, index) => (
@@ -260,7 +256,7 @@ const AllPhenomenons = () => {
         <div>
           <div>Précision :</div>
           <textarea
-            value={data.precision}
+            value={form.precision}
             placeholder="Votre texte ici..."
             onChange={(e) => handleChange(e, "precision")}
           />

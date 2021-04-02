@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { format } from "date-fns";
 import { Button } from "react-bootstrap";
+import PainBar from "./PainBar";
+import majorated from "../data/majorated.js";
+import checkUp from "../data/checkUp.js";
+import mobilities from "../data/mobilities";
+import evolutions from "../data/evolutions";
 
 const EvolutionUpdate = ({
   data,
@@ -10,343 +15,147 @@ const EvolutionUpdate = ({
   isEditing,
   setIsEditing,
 }) => {
-  const [apparitionDate, setApparitionDate] = useState("");
-  const [unchangedDate, setUnchangedDate] = useState("");
-  const [aggravationDate, setAggravationDate] = useState("");
-  const [disappearedDate, setDisappearedDate] = useState("");
-  const [title1, setTitle1] = useState("");
-  const [title2, setTitle2] = useState("");
-  const [title3, setTitle3] = useState("");
-  const [title4, setTitle4] = useState("");
+  const [evolType, setEvolType] = useState(evolution.name || "");
+  const [evolMajore, setEvolMajore] = useState(evolution.majorated || "");
+  const [evolDate, setEvolDate] = useState(
+    (evolution.date && format(new Date(evolution.date), "dd/MM/yyyy")) || ""
+  );
+  const [evolDouleur, setEvolDouleur] = useState(evolution.douleur || 1);
+  const [evolMobility, setEvolMobility] = useState(evolution.mobility || "");
+  const [evolCheckUp, setEvolCheckUp] = useState(evolution.checkUp || "");
+  const [evolPrecision, setEvolPrecision] = useState(evolution.precision || "");
 
   return (
     <div>
-      <div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <span>Apparition</span>
-
-          <input
-            disabled={isEditing ? "disabled" : ""}
-            type={isEditing ? "text" : "date"}
-            value={
-              isEditing
-                ? evolution.apparation
-                  ? format(new Date(evolution.apparation), "dd/MM/yyyy")
-                  : apparitionDate
-                : apparitionDate
-            }
-            onChange={(event) => {
-              setApparitionDate(event.target.value);
-            }}
-          />
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <span>Inchangé</span>
-
-          <input
-            disabled={isEditing ? "disabled" : ""}
-            type={isEditing ? "text" : "date"}
-            value={
-              isEditing
-                ? evolution.unchanged
-                  ? format(new Date(evolution.unchanged), "dd/MM/yyyy")
-                  : ""
-                : unchangedDate
-            }
-            onChange={(event) => {
-              setUnchangedDate(event.target.value);
-            }}
-          />
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <span>Title 1</span>
-          <input
-            disabled={isEditing ? "disabled" : ""}
-            type="textarea"
-            placeholder={evolution.title1}
-            value={title1}
-            onChange={(event) => {
-              setTitle1(event.target.value);
-            }}
-          />
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <span>Title 2</span>
-          <input
-            disabled={isEditing ? "disabled" : ""}
-            type="textarea"
-            placeholder={evolution.title2}
-            value={title2}
-            onChange={(event) => {
-              setTitle2(event.target.value);
-            }}
-          />
-        </div>
-      </div>
-
       <div style={{ marginBottom: 20 }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <span>Aggravation</span>
-          <input
+        <form>
+          <div>Evolutions :</div>
+          <select
             disabled={isEditing ? "disabled" : ""}
-            type={isEditing ? "text" : "date"}
-            value={
-              isEditing
-                ? evolution.aggravation
-                  ? format(new Date(evolution.aggravation), "dd/MM/yyyy")
-                  : ""
-                : aggravationDate
-            }
+            value={isEditing ? evolution.name : evolType}
             onChange={(event) => {
-              setAggravationDate(event.target.value);
+              setEvolType(event.target.value);
             }}
-          />
-        </div>
+          >
+            {evolutions.map((evo, index) => (
+              <option key={index} value={evo}>
+                {evo}
+              </option>
+            ))}
+          </select>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <span>Disparition</span>
-          <input
+          <div>Majoré par le mouvement :</div>
+          <select
             disabled={isEditing ? "disabled" : ""}
-            type={isEditing ? "text" : "date"}
-            placeholder={
-              evolution.disappear
-                ? format(new Date(evolution.disappear), "dd/MM/yyyy")
-                : ""
-            }
-            value={disappearedDate}
+            value={isEditing ? evolution.majorated : evolMajore}
             onChange={(event) => {
-              setDisappearedDate(event.target.value);
+              setEvolMajore(event.target.value);
             }}
-          />
-        </div>
+          >
+            {majorated.map((major, index) => (
+              <option key={index} value={major}>
+                {major}
+              </option>
+            ))}
+          </select>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <span>Title 3</span>
-          <input
-            disabled={isEditing ? "disabled" : ""}
-            type="textarea"
-            placeholder={evolution.title3}
-            value={title3}
-            onChange={(event) => {
-              setTitle3(event.target.value);
-            }}
-          />
-        </div>
+          <div>
+            <div>Date :</div>
+            <input
+              disabled={isEditing ? "disabled" : ""}
+              type={isEditing ? "text" : "date"}
+              value={
+                isEditing
+                  ? evolution.date
+                    ? format(new Date(evolution.date), "dd/MM/yyyy")
+                    : evolDate
+                  : evolDate
+              }
+              onChange={(event) => {
+                setEvolDate(event.target.value);
+              }}
+            />
+          </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <span>Title 4</span>
-          <input
+          {/* <div>
+            <PainBar />
+          </div> */}
+
+          <div id="slidecontainer">
+            <div>
+              <label>Douleur : </label>
+            </div>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <input
+                disabled={isEditing ? "disabled" : ""}
+                type="range"
+                style={{ marginRight: 25 }}
+                min="1"
+                max="10"
+                value={isEditing ? evolution.douleur : evolDouleur}
+                onChange={(event) => {
+                  setEvolDouleur(event.target.value);
+                }}
+              />
+              <div>
+                <i id="douleur"></i>
+                {isEditing && evolution.douleur
+                  ? evolution.douleur
+                  : evolDouleur}
+                /10
+              </div>
+            </div>
+          </div>
+
+          <div>Mobilité globale restreinte :</div>
+          <select
             disabled={isEditing ? "disabled" : ""}
-            type="textarea"
-            placeholder={evolution.title4}
-            value={title4}
+            value={isEditing ? evolution.mobility : evolMobility}
             onChange={(event) => {
-              setTitle4(event.target.value);
+              setEvolMobility(event.target.value);
             }}
-          />
-        </div>
+          >
+            {mobilities.map((mobility, index) => (
+              <option key={index} value={mobility}>
+                {mobility}
+              </option>
+            ))}
+          </select>
+
+          <div>Bilan Médical :</div>
+
+          <select
+            disabled={isEditing ? "disabled" : ""}
+            value={isEditing ? evolution.checkUp : evolCheckUp}
+            onChange={(event) => {
+              setEvolCheckUp(event.target.value);
+            }}
+          >
+            {checkUp.map((check, index) => (
+              <option key={index} value={check}>
+                {check}
+              </option>
+            ))}
+          </select>
+
+          <div>
+            <div>Précision :</div>
+            <textarea
+              disabled={isEditing ? "disabled" : ""}
+              placeholder="Votre texte ici..."
+              value={isEditing ? evolution.precision : evolPrecision}
+              onChange={(event) => {
+                setEvolPrecision(event.target.value);
+              }}
+            />
+          </div>
+        </form>
       </div>
       {!isEditing && (
         <Button onClick={() => setIsEditing(!isEditing)}>Sauvegarder</Button>
       )}
     </div>
   );
-
-  // <div>
-  //   <div>
-  //     <div
-  //       style={{
-  //         display: "flex",
-  //         justifyContent: "space-between",
-  //       }}
-  //     >
-  //       <span>Apparition</span>
-  //       {/* {evo.apparation ? format(new Date(evo.apparation), "dd/MM/yyyy") : ""} */}
-  //       <input
-  //         disabled={isEditing ? "disabled" : ""}
-  //         type="date"
-  //         value={apparitionDate}
-  //         onChange={(event) => {
-  //           setApparitionDate(event.target.value);
-  //         }}
-  //       />
-  //     </div>
-
-  //     <div
-  //       style={{
-  //         display: "flex",
-  //         justifyContent: "space-between",
-  //       }}
-  //     >
-  //       <span>Inchangé</span>
-  //       {/* {evo.unchanged ? format(new Date(evo.unchanged), "dd/MM/yyyy") : ""} */}
-  //       <input
-  //         disabled={isEditing ? "disabled" : ""}
-  //         type="date"
-  //         value={unchangedDate}
-  //         onChange={(event) => {
-  //           setUnchangedDate(event.target.value);
-  //         }}
-  //       />
-  //     </div>
-
-  //     <div
-  //       style={{
-  //         display: "flex",
-  //         justifyContent: "space-between",
-  //       }}
-  //     >
-  //       <span>Title 1</span>
-  //       {/* {evo.title1} */}
-  //       <input
-  //         disabled={isEditing ? "disabled" : ""}
-  //         type="textarea"
-  //         value={title1}
-  //         onChange={(event) => {
-  //           setTitle1(event.target.value);
-  //         }}
-  //       />
-  //     </div>
-
-  //     <div
-  //       style={{
-  //         display: "flex",
-  //         justifyContent: "space-between",
-  //       }}
-  //     >
-  //       <span>Title 2</span>
-  //       {/* {evo.title2} */}
-  //       <input
-  //         disabled={isEditing ? "disabled" : ""}
-  //         type="textarea"
-  //         value={title2}
-  //         onChange={(event) => {
-  //           setTitle2(event.target.value);
-  //         }}
-  //       />
-  //     </div>
-
-  //     <div style={{ marginBottom: 20 }}>
-  //       <div
-  //         style={{
-  //           display: "flex",
-  //           justifyContent: "space-between",
-  //         }}
-  //       >
-  //         <span>Aggravation</span>
-  //         {/* {evo.aggravation
-  //         ? format(new Date(evo.aggravation), "dd/MM/yyyy")
-  //         : ""} */}
-  //         <input
-  //           disabled={isEditing ? "disabled" : ""}
-  //           type="date"
-  //           value={aggravationDate}
-  //           onChange={(event) => {
-  //             setAggravationDate(event.target.value);
-  //           }}
-  //         />
-  //       </div>
-
-  //       <div
-  //         style={{
-  //           display: "flex",
-  //           justifyContent: "space-between",
-  //         }}
-  //       >
-  //         <span>Disparition</span>
-  //         {/* {evo.disappear ? format(new Date(evo.disappear), "dd/MM/yyyy") : ""} */}
-  //         <input
-  //           disabled={isEditing ? "disabled" : ""}
-  //           type="date"
-  //           value={disappearedDate}
-  //           onChange={(event) => {
-  //             setDisappearedDate(event.target.value);
-  //           }}
-  //         />
-  //       </div>
-
-  //       <div
-  //         style={{
-  //           display: "flex",
-  //           justifyContent: "space-between",
-  //         }}
-  //       >
-  //         <span>Title 3</span>
-  //         {/* {evo.title3} */}
-  //         <input
-  //           disabled={isEditing ? "disabled" : ""}
-  //           type="textarea"
-  //           value={title3}
-  //           onChange={(event) => {
-  //             setTitle3(event.target.value);
-  //           }}
-  //         />
-  //       </div>
-
-  //       <div
-  //         style={{
-  //           display: "flex",
-  //           justifyContent: "space-between",
-  //         }}
-  //       >
-  //         <span>Title 4</span>
-  //         {/* {evo.title4} */}
-  //         <input
-  //           disabled={isEditing ? "disabled" : ""}
-  //           type="textarea"
-  //           value={title4}
-  //           onChange={(event) => {
-  //             setTitle4(event.target.value);
-  //           }}
-  //         />
-  //       </div>
-  //     </div>
-  //   </div>
-
-  // </div>
 };
 
 export default EvolutionUpdate;

@@ -1,10 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
-const PainBar = ({ pain, setPain }) => {
-  const onChangePain = (event) => {
-    setPain(event.target.value);
-  };
-
+const PainBar = ({ form, pain, handleChange }) => {
   return (
     <div>
       <div id="slidecontainer">
@@ -14,15 +10,17 @@ const PainBar = ({ pain, setPain }) => {
 
         <div>
           <i id="douleur"></i>
-          {pain}/10
+          {form.douleur ? form.douleur : pain}/10
         </div>
         <input
           type="range"
           className=""
           min="1"
           max="10"
-          value={pain}
-          onChange={onChangePain}
+          value={form.douleur ? form.douleur : pain}
+          onChange={(e) => {
+            handleChange(e, "douleur");
+          }}
         />
       </div>
     </div>
