@@ -5,7 +5,7 @@ import AllEvolutions from "./AllEvolutions";
 import "./Phenomenons.css";
 import { Card } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrashAlt, faEye } from "@fortawesome/free-solid-svg-icons";
 
 const Phenomenons = ({ data, setData }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -68,16 +68,11 @@ const Phenomenons = ({ data, setData }) => {
                 // Au survol, affichage des buttons ou non
                 onMouseEnter={(event) => seeButton(event, index)}
                 onMouseLeave={(event) => seeButton(event, null)}
-                onClick={() => {
-                  setShowDetails(!showDetails);
-                  setSelectedEvolID(form);
-                }}
               >
                 <Card.Body
                   style={{
                     display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
+                    flexDirection: "column",
                   }}
                 >
                   <div>
@@ -86,27 +81,36 @@ const Phenomenons = ({ data, setData }) => {
 
                   <div
                     style={{
-                      display: "flex",
-                      justifyContent: "space-around",
-                      width: 50,
+                      display: phenoSelected === index ? "" : "none",
+                      justifyContent: "space-between",
                     }}
                   >
                     <FontAwesomeIcon
+                      icon={faPlus}
+                      // style={{ display: phenoSelected === index ? "" : "none" }}
+                      onClick={() => {
+                        // handleShow();
+                        setSelectedID(form._id);
+                        alert("Voulez-vous ajouter une evolution ?");
+                      }}
+                    />
+                    <FontAwesomeIcon
                       icon={faTrashAlt}
-                      style={{ display: phenoSelected === index ? "" : "none" }}
+                      // style={{ display: phenoSelected === index ? "" : "none" }}
                       onClick={() => {
                         alert(`Delete ${form.pheno} ${form.territoire} ?`);
 
                         deleteForm(form._id);
                       }}
                     />
+
                     <FontAwesomeIcon
-                      icon={faPlus}
-                      style={{ display: phenoSelected === index ? "" : "none" }}
+                      icon={faEye}
+                      // style={{ display: phenoSelected === index ? "" : "none" }}
                       onClick={() => {
-                        // handleShow();
-                        setSelectedID(form._id);
-                        alert("Voulez-vous ajouter une evolution ?");
+                        setShowDetails(!showDetails);
+                        setSelectedEvolID(form);
+                        alert("Voulez-vous voir les evolutions ?");
                       }}
                     />
                   </div>
