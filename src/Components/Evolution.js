@@ -1,101 +1,69 @@
 import React, { useState } from "react";
+import majorated from "../data/majorated.js";
+import checkUp from "../data/checkUp.js";
+import mobilities from "../data/mobilities";
+import evolutions from "../data/evolutions";
 import axios from "axios";
-import { Button } from "react-bootstrap";
+import { Accordion, Button, Card, Form } from "react-bootstrap";
 
-const Evolution = ({ data, setData, evolution, pheno }) => {
-  const [apparitionDate, setApparitionDate] = useState("");
-  const [unchangedDate, setUnchangedDate] = useState("");
-  const [aggravationDate, setAggravationDate] = useState("");
-  const [disappearedDate, setDisappearedDate] = useState("");
-  const [title1, setTitle1] = useState("");
-  const [title2, setTitle2] = useState("");
-  const [title3, setTitle3] = useState("");
-  const [title4, setTitle4] = useState("");
+const Evolution = ({ data, setData, pheno }) => {
+  const [evolType, setEvolType] = useState("");
+  const [evolMajore, setEvolMajore] = useState("");
+  const [evolDate, setEvolDate] = useState("");
+  const [evolDouleur, setEvolDouleur] = useState(1);
+  const [evolMobility, setEvolMobility] = useState("");
+  const [evolCheckUp, setEvolCheckUp] = useState("");
+  const [evolPrecision, setEvolPrecision] = useState("");
 
-  // Soumettre les modifications d'une évolution
-  const handleSubmit = async () => {
-    if (
-      apparitionDate !== "" ||
-      unchangedDate !== "" ||
-      aggravationDate !== "" ||
-      disappearedDate !== "" ||
-      title1 !== "" ||
-      title2 !== "" ||
-      title3 !== "" ||
-      title4 !== ""
-    ) {
-      const response = await axios.post(
-        // `http://localhost:3000/add-evolution/${selectedID}`,
-        `http://localhost:3000/add-evolution/${evolution._id}`,
-        {
-          apparitionDate,
-          unchangedDate,
-          aggravationDate,
-          disappearedDate,
-          title1,
-          title2,
-          title3,
-          title4,
-        }
-      );
-      // setData(response.data.resultat);
-      setData([
-        ...data.map((row) => {
-          // if (row._id === selectedID) {
-          if (row._id === evolution._id) {
-            row.evolutions.push(response.data.resultat);
+  console.log(pheno);
+
+  const evolutionsToSave = (idPheno) => {
+    idPheno = pheno._id;
+
+    axios
+      .post(`http://localhost:3000/add-evolution/${idPheno}`, {
+        evolType,
+        evolMajore,
+        evolMobility,
+        evolDate,
+        evolDouleur,
+        evolPrecision,
+        evolCheckUp,
+      })
+      .then((response) => {
+        console.log(response);
+        // response.data.resultat
+
+        setData(
+          // Je récupère l'ancien état qui est un tableau
+          (data) => {
+            // Je parcours mon tableau
+            return data.map((row) => {
+              // Si row._id est égal à idPheno passé en paramètre
+              if (row._id === idPheno) {
+                // alors je le remplace par response.data.resultat
+                return response.data.resultat;
+              }
+              // Sinon je retourne row
+              return row;
+            });
           }
-          return row;
-        }),
-      ]);
-      setApparitionDate("");
-      setUnchangedDate("");
-      setAggravationDate("");
-      setDisappearedDate("");
-      setTitle1("");
-      setTitle2("");
-      setTitle3("");
-      setTitle4("");
-      // handleClose();
-    } else {
-      alert("Merci de remplir un champ");
-    }
+        );
+      })
+      .catch((error) => alert({ error: error.message }));
   };
 
-  // Modifier une evolution d'un form
+  const handleSubmitEvo = (event) => {
+    event.preventDefault();
 
-  const updateEvolution = async (idForm, idEvolution) => {
-    console.log(`evoToDelete ${idForm} ${idEvolution}`); // on récupère l'id du form et l'id de l'evolution concernés
-
-    const response = await axios.put(
-      `http://localhost:3000/form/${idForm}/update-evolution/${idEvolution}`,
-      {
-        apparitionDate,
-        unchangedDate,
-        aggravationDate,
-        disappearedDate,
-        title1,
-        title2,
-        title3,
-        title4,
-      }
-    );
-
-    // console.log(response);
-
-    setData(
-      data.map((pheno) => {
-        if (pheno._id === idForm) {
-          pheno.evolutions = pheno.evolutions.map((evo) => {
-            if (evo._id === idEvolution) {
-              return response.data.resultat;
-            }
-            return evo;
-          });
-        }
-        return pheno;
-      })
-    );
+    evolutionsToSave();
+    setEvolType("");
+    setEvolMajore("");
+    setEvolMobility("");
+    setEvolDate("");
+    setEvolDouleur(1);
+    setEvolPrecision("");
+    setEvolCheckUp("");
   };
 
   return (
@@ -106,103 +74,214 @@ const Evolution = ({ data, setData, evolution, pheno }) => {
         marginBottom: 10,
       }}
     >
-      <h3>Evolution</h3>
-      <form style={{ marginBottom: 30 }}>
-        {/* 1er bloc */}
-        <div style={{ marginBottom: 20 }}>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span>Apparition</span>
-            <input
-              type="date"
-              value={apparitionDate}
-              onChange={(event) => {
-                // console.log("Date selectionnée");
-                setApparitionDate(event.target.value);
-              }}
-            />
-          </div>
+      <Accordion>
+        <Card>
+          <Card.Header
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 0,
+            }}
+          >
+            <Card.Title style={{ marginBottom: 0 }}>
+              {evolType ? evolType : "Ajouter une évolution"}
+            </Card.Title>
+            <Accordion.Toggle as={Button} variant="link" eventKey="0">
+              Voir
+            </Accordion.Toggle>
+          </Card.Header>
+          <Accordion.Collapse eventKey="0">
+            <Card.Body>
+              <Form>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <Form.Group controlId="Evolutions">
+                    <Form.Label
+                      style={{ display: "flex", justifyContent: "left" }}
+                    >
+                      Evolutions :
+                    </Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={evolType}
+                      onChange={(event) => {
+                        setEvolType(event.target.value);
+                      }}
+                    >
+                      <option value="">Evolutions</option>
+                      {evolutions.map((evo, index) => (
+                        <option key={index} value={evo}>
+                          {evo}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Form.Group>
 
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span>Inchangé</span>
-            <input
-              type="date"
-              value={unchangedDate}
-              onChange={(event) => {
-                setUnchangedDate(event.target.value);
-              }}
-            />
-          </div>
+                  <Form.Group controlId="Majorated">
+                    <Form.Label
+                      style={{ display: "flex", justifyContent: "left" }}
+                    >
+                      Majoré par le mouvement :
+                    </Form.Label>
+                    <Form.Control
+                      as="select"
+                      value={evolMajore}
+                      onChange={(event) => {
+                        setEvolMajore(event.target.value);
+                      }}
+                    >
+                      <option value="">Majoré par le mouvement</option>
+                      {majorated.map((major, index) => (
+                        <option key={index} value={major}>
+                          {major}
+                        </option>
+                      ))}
+                    </Form.Control>
+                  </Form.Group>
 
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span>Title 1</span>
-            <input
-              type="textarea"
-              value={title1}
-              onChange={(event) => {
-                setTitle1(event.target.value);
-              }}
-            />
-          </div>
+                  <div>
+                    <Form.Group controlId="Date">
+                      <Form.Label
+                        style={{ display: "flex", justifyContent: "left" }}
+                      >
+                        Date :
+                      </Form.Label>
+                      <Form.Control
+                        as="input"
+                        type="date"
+                        value={evolDate}
+                        onChange={(event) => {
+                          setEvolDate(event.target.value);
+                        }}
+                      ></Form.Control>
+                    </Form.Group>
+                  </div>
+                </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span>Title 2</span>
-            <input
-              type="textarea"
-              value={title2}
-              onChange={(event) => {
-                setTitle2(event.target.value);
-              }}
-            />
-          </div>
-        </div>
+                <div id="slidecontainer">
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <Form.Group
+                      controlId="Douleur"
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        marginRight: 20,
+                      }}
+                    >
+                      <Form.Label
+                        style={{ display: "flex", justifyContent: "left" }}
+                      >
+                        Douleur :
+                      </Form.Label>
+                      <Form.Control
+                        type="range"
+                        // custom
 
-        <div style={{ marginBottom: 20 }}>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span>Aggravation</span>
-            <input
-              type="date"
-              value={aggravationDate}
-              onChange={(event) => {
-                setAggravationDate(event.target.value);
-              }}
-            />
-          </div>
+                        min="1"
+                        max="10"
+                        style={{ width: 575 }}
+                        value={evolDouleur}
+                        onChange={(event) => {
+                          setEvolDouleur(event.target.value);
+                        }}
+                      />
+                    </Form.Group>
 
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span>Disparition</span>
-            <input
-              type="date"
-              value={disappearedDate}
-              onChange={(event) => {
-                setDisappearedDate(event.target.value);
-              }}
-            />
-          </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginTop: 13,
+                      }}
+                    >
+                      <i id="douleur"></i>
+                      {evolDouleur}
+                      /10
+                    </div>
+                  </div>
+                </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span>Title 3</span>
-            <input
-              type="textarea"
-              value={title3}
-              onChange={(event) => {
-                setTitle3(event.target.value);
-              }}
-            />
-          </div>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <div>
+                    <Form.Group controlId="Précision">
+                      <Form.Label
+                        style={{ display: "flex", justifyContent: "left" }}
+                      >
+                        Précision :
+                      </Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        size="lg"
+                        rows={4}
+                        cols={30}
+                        placeholder="Votre texte ici..."
+                        value={evolPrecision}
+                        onChange={(event) => {
+                          setEvolPrecision(event.target.value);
+                        }}
+                      ></Form.Control>
+                    </Form.Group>
+                  </div>
+                  <div>
+                    <Form.Group controlId="Mobilité">
+                      <Form.Label
+                        style={{ display: "flex", justifyContent: "left" }}
+                      >
+                        Mobilité globale restreinte :
+                      </Form.Label>
+                      <Form.Control
+                        as="select"
+                        value={evolMobility}
+                        onChange={(event) => {
+                          setEvolMobility(event.target.value);
+                        }}
+                      >
+                        <option value="">Mobilité globale restreinte</option>
+                        {mobilities.map((mobility, index) => (
+                          <option key={index} value={mobility}>
+                            {mobility}
+                          </option>
+                        ))}
+                      </Form.Control>
+                    </Form.Group>
 
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span>Title 4</span>
-            <input
-              type="textarea"
-              value={title4}
-              onChange={(event) => {
-                setTitle4(event.target.value);
-              }}
-            />
-          </div>
-          <Button onSubmit={handleSubmit}>Sauvegarder</Button>
-        </div>
-      </form>
+                    <Form.Group controlId="CheckUp">
+                      <Form.Label
+                        style={{ display: "flex", justifyContent: "left" }}
+                      >
+                        Bilan Médical :
+                      </Form.Label>
+                      <Form.Control
+                        as="select"
+                        value={evolCheckUp}
+                        onChange={(event) => {
+                          setEvolCheckUp(event.target.value);
+                        }}
+                      >
+                        <option value="">Bilan Médical</option>
+                        {checkUp.map((check, index) => (
+                          <option key={index} value={check}>
+                            {check}
+                          </option>
+                        ))}
+                      </Form.Control>
+                    </Form.Group>
+
+                    <div>
+                      <Button onClick={handleSubmitEvo}>Sauvegarder</Button>
+                    </div>
+                  </div>
+                </div>
+              </Form>
+            </Card.Body>
+          </Accordion.Collapse>
+        </Card>
+      </Accordion>
     </div>
   );
 };

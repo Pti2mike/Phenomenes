@@ -3,7 +3,6 @@ import axios from "axios";
 import Phenomenons from "./Phenomenons";
 import PainBar from "./PainBar";
 import { Form } from "react-bootstrap";
-import { set } from "date-fns";
 
 const AllPhenomenons = () => {
   const phenomenons = [
@@ -285,7 +284,11 @@ const AllPhenomenons = () => {
               <Form.Label style={{ display: "flex", justifyContent: "left" }}>
                 Mobilité globale restreinte :
               </Form.Label>
-              <Form.Control as="select">
+              <Form.Control
+                as="select"
+                value={form.mobility}
+                onChange={(e) => handleChange(e, "mobility")}
+              >
                 <option value="">Mobilité globale restreinte</option>
                 {mobilities.map((mobility, index) => (
                   <option key={index} value={mobility}>
@@ -301,7 +304,11 @@ const AllPhenomenons = () => {
               <Form.Label style={{ display: "flex", justifyContent: "left" }}>
                 Bilan Médical :
               </Form.Label>
-              <Form.Control as="select">
+              <Form.Control
+                as="select"
+                value={form.checkUp}
+                onChange={(e) => handleChange(e, "checkUp")}
+              >
                 <option value="">Bilan Médical</option>
                 {checkUp.map((check, index) => (
                   <option key={index} value={check}>

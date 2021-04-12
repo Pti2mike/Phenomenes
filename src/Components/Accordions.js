@@ -6,16 +6,16 @@ import axios from "axios";
 const Accordions = ({ data, setData, pheno, evolution, index }) => {
   const [isEditing, setIsEditing] = useState(true);
 
-  // Supprimer une evolution d'un form
-  const deleteEvolution = async (idForm, idEvolution) => {
-    console.log(`evoToDelete ${idForm} ${idEvolution}`); // on récupère l'id du form et l'id de l'evolution concernés
+  // Supprimer une evolution d'un phenomène
+  const deleteEvolution = async (idPhenomenon, idEvolution) => {
+    console.log(`evoToDelete ${idPhenomenon} ${idEvolution}`); // on récupère l'id du form et l'id de l'evolution concernés
 
     axios
       .delete(
-        `http://localhost:3000/form/${idForm}/delete-evolution/${idEvolution}`
+        `http://localhost:3000/phenomenon/${idPhenomenon}/delete-evolution/${idEvolution}`
       )
       .then((response) => {
-        // console.log(response.data.resultat);
+        console.log(response.data.resultat);
 
         setData(
           data.map((row) => {
@@ -43,9 +43,12 @@ const Accordions = ({ data, setData, pheno, evolution, index }) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              marginBottom: 0,
             }}
           >
-            <Card.Title>Evolution {index}</Card.Title>
+            <Card.Title style={{ marginBottom: 0 }}>
+              {evolution.type}
+            </Card.Title>
             <div style={{ display: "flex" }}>
               <div>
                 {isEditing ? (
@@ -76,7 +79,7 @@ const Accordions = ({ data, setData, pheno, evolution, index }) => {
                 <Button
                   style={{ marginRight: 5 }}
                   onClick={() => {
-                    // deleteEvolution(pheno._id, evo._id);
+                    deleteEvolution(pheno._id, evolution._id);
                   }}
                 >
                   Supprimer

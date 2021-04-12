@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Evolution from "./Evolution";
 import AllEvolutions from "./AllEvolutions";
 import "./Phenomenons.css";
 import { Card } from "react-bootstrap";
@@ -28,16 +27,19 @@ const Phenomenons = ({ data, setData }) => {
   const visibility = selectedEvolID._id ? "visible" : "hidden";
 
   // Supprimer un form
-  const deleteForm = async (id) => {
-    // console.log(id); // on récupère l'id du form concerné
+  const deletePheno = async (id) => {
+    console.log(id); // on récupère l'id du form concerné
     try {
-      const response = await axios.post(`http://localhost:3000/delete-form`, {
-        id,
-      });
+      const response = await axios.delete(
+        `http://localhost:3000/delete-phenomenon/${id}`
+        // {
+        //   id,
+        // }
+      );
       if (response.data.message === "Deleted") {
         setData(response.data.resultat);
       }
-      console.log("deleteForm", response);
+      console.log("deletePheno", response);
     } catch (error) {
       alert({ error: error.message });
     }
@@ -82,25 +84,28 @@ const Phenomenons = ({ data, setData }) => {
                   <div
                     style={{
                       display: phenoSelected === index ? "" : "none",
-                      justifyContent: "space-between",
                     }}
                   >
                     <FontAwesomeIcon
+                      style={{ marginRight: 20 }}
                       icon={faPlus}
                       // style={{ display: phenoSelected === index ? "" : "none" }}
                       onClick={() => {
                         // handleShow();
                         setSelectedID(form._id);
                         alert("Voulez-vous ajouter une evolution ?");
+                        setShowDetails(!showDetails);
+                        setSelectedEvolID(form);
                       }}
                     />
                     <FontAwesomeIcon
+                      style={{ marginRight: 20 }}
                       icon={faTrashAlt}
                       // style={{ display: phenoSelected === index ? "" : "none" }}
                       onClick={() => {
                         alert(`Delete ${form.pheno} ${form.territoire} ?`);
 
-                        deleteForm(form._id);
+                        deletePheno(form._id);
                       }}
                     />
 
@@ -110,7 +115,6 @@ const Phenomenons = ({ data, setData }) => {
                       onClick={() => {
                         setShowDetails(!showDetails);
                         setSelectedEvolID(form);
-                        alert("Voulez-vous voir les evolutions ?");
                       }}
                     />
                   </div>

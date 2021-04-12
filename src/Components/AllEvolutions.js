@@ -1,5 +1,6 @@
 import React from "react";
 import Accordions from "./Accordions";
+import Evolution from "./Evolution";
 
 const AllEvolutions = ({ data, setData, pheno }) => {
   return (
@@ -11,6 +12,8 @@ const AllEvolutions = ({ data, setData, pheno }) => {
       }}
     >
       <h3>Evolutions</h3>
+      <Evolution pheno={pheno} setData={setData} data={data} />
+
       {pheno.evolutions &&
         data
           .find((row) => row._id === pheno._id)

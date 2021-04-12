@@ -1,12 +1,12 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { format } from "date-fns";
-import { Button } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import PainBar from "./PainBar";
 import majorated from "../data/majorated.js";
 import checkUp from "../data/checkUp.js";
 import mobilities from "../data/mobilities";
 import evolutions from "../data/evolutions";
-import { Form } from "react-bootstrap";
 
 const EvolutionUpdate = ({
   data,
@@ -16,7 +16,7 @@ const EvolutionUpdate = ({
   isEditing,
   setIsEditing,
 }) => {
-  const [evolType, setEvolType] = useState(evolution.name || "");
+  const [evolType, setEvolType] = useState(evolution.type || "");
   const [evolMajore, setEvolMajore] = useState(evolution.majorated || "");
   const [evolDate, setEvolDate] = useState(
     (evolution.date && format(new Date(evolution.date), "dd/MM/yyyy")) || ""
@@ -25,6 +25,60 @@ const EvolutionUpdate = ({
   const [evolMobility, setEvolMobility] = useState(evolution.mobility || "");
   const [evolCheckUp, setEvolCheckUp] = useState(evolution.checkUp || "");
   const [evolPrecision, setEvolPrecision] = useState(evolution.precision || "");
+
+  const handleSaveEvo = async (idPhenomenon, idEvolution) => {
+    console.log(`evoToUpdate ${idPhenomenon} ${idEvolution}`); // on récupère l'id du form et l'id de l'evolution concernés
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/phenomenon/${idPhenomenon}/update-evolution/${idEvolution}`,
+        {
+          evolType,
+          evolMajore,
+          evolMobility,
+          evolDate,
+          evolDouleur,
+          evolPrecision,
+          evolCheckUp,
+        }
+      );
+      console.log(response);
+
+      // setData([
+      //   ...data.map((row) => {
+      //     if (row._id === evolution._id) {
+      //       row.evolutions.push(response.data.resultat);
+      //     }
+      //     return row;
+      //   }),
+      // ]);
+
+      setData(
+        data.map((pheno) => {
+          if (pheno._id === idPhenomenon) {
+            pheno.evolutions = pheno.evolutions.map((evo) => {
+              if (evo._id === idEvolution) {
+                return response.data.resultat;
+              }
+              return evo;
+            });
+          }
+          return pheno;
+        })
+      );
+
+      setEvolType("");
+      setEvolMajore("");
+      setEvolMobility("");
+      setEvolDate("");
+      setEvolDouleur(1);
+      setEvolPrecision("");
+      setEvolCheckUp("");
+
+      setIsEditing(!isEditing);
+    } catch (error) {
+      alert({ error: error.message });
+    }
+  };
 
   return (
     <div>
@@ -38,7 +92,7 @@ const EvolutionUpdate = ({
               <Form.Control
                 as="select"
                 disabled={isEditing ? "disabled" : ""}
-                value={isEditing ? evolution.name : evolType}
+                value={isEditing ? evolution.type : evolType}
                 onChange={(event) => {
                   setEvolType(event.target.value);
                 }}
@@ -204,7 +258,11 @@ const EvolutionUpdate = ({
 
               <div>
                 {!isEditing && (
-                  <Button onClick={() => setIsEditing(!isEditing)}>
+                  <Button
+                    onClick={() => {
+                      handleSaveEvo(pheno._id, evolution._id);
+                    }}
+                  >
                     Sauvegarder
                   </Button>
                 )}
