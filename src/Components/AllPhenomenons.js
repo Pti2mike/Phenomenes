@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Phenomenons from "./Phenomenons";
 import PainBar from "./PainBar";
-import { Form } from "react-bootstrap";
+import { Alert, Form } from "react-bootstrap";
+import { useForm, Controller } from "react-hook-form";
 
 const AllPhenomenons = () => {
   const phenomenons = [
@@ -98,7 +99,6 @@ const AllPhenomenons = () => {
 
   const [data, setData] = useState({});
   const [form, setForm] = useState({});
-  const [pain, setPain] = useState(1);
 
   // Get all data from database
 
@@ -122,7 +122,8 @@ const AllPhenomenons = () => {
     try {
       const response = await axios.post(
         "http://localhost:3000/add-phenomenon",
-        form
+        // form
+        data
       );
       console.log(response);
       setData(response.data.resultat);
@@ -133,59 +134,73 @@ const AllPhenomenons = () => {
 
   // Modification du phénomène TEST switch
 
-  const handleChange = (event, type) => {
-    switch (type) {
-      case "pheno":
-        setForm({ ...form, pheno: event.target.value });
-        break;
-      case "territoire":
-        setForm({ ...form, territoire: event.target.value });
-        break;
-      case "majore":
-        setForm({ ...form, majore: event.target.value });
-        break;
-      case "date":
-        setForm({ ...form, date: event.target.value });
-        break;
-      case "douleur":
-        setForm({ ...form, douleur: event.target.value });
-        break;
-      case "mobility":
-        setForm({ ...form, mobility: event.target.value });
-        break;
-      case "checkUp":
-        setForm({ ...form, checkUp: event.target.value });
-        break;
-      case "precision":
-        setForm({ ...form, precision: event.target.value });
-        break;
-      default:
-        console.log("Type non trouvé");
-        break;
-    }
-  };
+  // const handleChange = (event, type) => {
+  //   switch (type) {
+  //     case "pheno":
+  //       setForm({ ...form, pheno: event.target.value });
+  //       break;
+  //     case "territoire":
+  //       setForm({ ...form, territoire: event.target.value });
+  //       break;
+  //     case "majore":
+  //       setForm({ ...form, majore: event.target.value });
+  //       break;
+  //     case "date":
+  //       setForm({ ...form, date: event.target.value });
+  //       break;
+  //     case "douleur":
+  //       setForm({ ...form, douleur: event.target.value });
+  //       break;
+  //     case "mobility":
+  //       setForm({ ...form, mobility: event.target.value });
+  //       break;
+  //     case "checkUp":
+  //       setForm({ ...form, checkUp: event.target.value });
+  //       break;
+  //     case "precision":
+  //       setForm({ ...form, precision: event.target.value });
+  //       break;
+  //     default:
+  //       console.log("Type non trouvé");
+  //       break;
+  //   }
+  // };
 
   // Validation du phénomène
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
 
-    phenoToSave();
-    setForm({
-      pheno: "",
-      territoire: "",
-      majore: "",
-      date: "",
-      douleur: 1,
-      mobility: "",
-      checkUp: "",
-      precision: "",
-    });
+  //   phenoToSave();
+  //   setForm({
+  //     pheno: "",
+  //     territoire: "",
+  //     majore: "",
+  //     date: "",
+  //     douleur: 1,
+  //     mobility: "",
+  //     checkUp: "",
+  //     precision: "",
+  //   });
+  // };
+
+  const { register, handleSubmit, formState, control } = useForm();
+
+  const { isSubmitting, isSubmitted, isSubmitSuccessful } = formState;
+
+  const onSubmit = async (data) => {
+    console.log(data);
+    // phenoToSave();
   };
+
+  console.log(formState);
 
   return (
     <div>
-      <Form style={{ marginBottom: 50 }} onSubmit={handleSubmit}>
+      <Form style={{ marginBottom: 50 }} onSubmit={handleSubmit(onSubmit)}>
+        {isSubmitSuccessful && (
+          <Alert variant="success">Formulaire enregistré</Alert>
+        )}
         <div
           style={{
             display: "flex",
@@ -198,11 +213,7 @@ const AllPhenomenons = () => {
               <Form.Label style={{ display: "flex", justifyContent: "left" }}>
                 Nom du phénomène :
               </Form.Label>
-              <Form.Control
-                as="select"
-                value={form.pheno}
-                onChange={(e) => handleChange(e, "pheno")}
-              >
+              <Form.Control as="select" {...register("phenomenon")}>
                 <option value="">Nom du phénomène</option>
                 {phenomenons.map((pheno, index) => (
                   <option key={index} value={pheno}>
@@ -218,11 +229,7 @@ const AllPhenomenons = () => {
               <Form.Label style={{ display: "flex", justifyContent: "left" }}>
                 Territoire :
               </Form.Label>
-              <Form.Control
-                as="select"
-                value={form.territoire}
-                onChange={(e) => handleChange(e, "territoire")}
-              >
+              <Form.Control as="select" {...register("territoire")}>
                 <option value="">Territoire</option>
                 {territoires.map((territoire, index) => (
                   <option key={index} value={territoire}>
@@ -238,11 +245,7 @@ const AllPhenomenons = () => {
               <Form.Label style={{ display: "flex", justifyContent: "left" }}>
                 Majoré par le mouvement :
               </Form.Label>
-              <Form.Control
-                as="select"
-                value={form.majore}
-                onChange={(e) => handleChange(e, "majore")}
-              >
+              <Form.Control as="select" {...register("majore")}>
                 <option value="">Majoré par le mouvement</option>
                 {majorated.map((major, index) => (
                   <option key={index} value={major}>
@@ -261,8 +264,7 @@ const AllPhenomenons = () => {
               <Form.Control
                 as="input"
                 type="date"
-                value={form.date}
-                onChange={(e) => handleChange(e, "date")}
+                {...register("date")}
               ></Form.Control>
             </Form.Group>
           </div>
@@ -276,7 +278,15 @@ const AllPhenomenons = () => {
           }}
         >
           <div>
-            <PainBar form={form} pain={pain} handleChange={handleChange} />
+            <Form.Group>
+              <Form.Label>Douleur :</Form.Label>
+              <PainBar
+                // form={form}
+                // pain={pain}
+                {...register("douleur")}
+                id="douleur"
+              />
+            </Form.Group>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column" }}>
@@ -284,11 +294,7 @@ const AllPhenomenons = () => {
               <Form.Label style={{ display: "flex", justifyContent: "left" }}>
                 Mobilité globale restreinte :
               </Form.Label>
-              <Form.Control
-                as="select"
-                value={form.mobility}
-                onChange={(e) => handleChange(e, "mobility")}
-              >
+              <Form.Control as="select" {...register("mobility")}>
                 <option value="">Mobilité globale restreinte</option>
                 {mobilities.map((mobility, index) => (
                   <option key={index} value={mobility}>
@@ -304,11 +310,7 @@ const AllPhenomenons = () => {
               <Form.Label style={{ display: "flex", justifyContent: "left" }}>
                 Bilan Médical :
               </Form.Label>
-              <Form.Control
-                as="select"
-                value={form.checkUp}
-                onChange={(e) => handleChange(e, "checkUp")}
-              >
+              <Form.Control as="select" {...register("checkUp")}>
                 <option value="">Bilan Médical</option>
                 {checkUp.map((check, index) => (
                   <option key={index} value={check}>
@@ -335,16 +337,14 @@ const AllPhenomenons = () => {
               as="textarea"
               size="lg"
               rows={4}
-              value={form.precision}
-              onChange={(e) => handleChange(e, "precision")}
+              {...register("precision")}
             ></Form.Control>
           </Form.Group>
         </div>
 
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <input
-            type="submit"
-            value="Ajouter"
+          <button
+            disabled={isSubmitting}
             style={{
               backgroundColor: "#0069d9",
               color: "white",
@@ -354,7 +354,9 @@ const AllPhenomenons = () => {
               padding: 8,
               width: 160,
             }}
-          />
+          >
+            Ajouter
+          </button>
         </div>
       </Form>
 

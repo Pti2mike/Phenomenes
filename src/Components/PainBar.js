@@ -1,26 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 
-const PainBar = ({ form, pain, handleChange }) => {
+const PainBar = React.forwardRef(({ onChange, ...rest }, ref) => {
+  onChange = (e) => {
+    setRange(parseInt(e.target.value));
+  };
+
+  console.log(rest);
+
+  const [range, setRange] = useState(1);
+
   return (
     <div id="slidecontainer">
-      {/* <div>
-        <label>Douleur : </label>
-      </div> */}
-
       <div style={{ display: "flex" }}>
-        {/* <input
-          type="range"
-          className=""
-          min="1"
-          max="10"
-          value={form.douleur ? form.douleur : pain}
-          onChange={(e) => {
-            handleChange(e, "douleur");
-          }}
-        /> */}
         <Form.Group
-          controlId="Douleur"
           style={{
             display: "flex",
             flexDirection: "column",
@@ -28,19 +21,16 @@ const PainBar = ({ form, pain, handleChange }) => {
             marginRight: 20,
           }}
         >
-          <Form.Label style={{ display: "flex", justifyContent: "left" }}>
-            Douleur :
-          </Form.Label>
           <Form.Control
             type="range"
-            // custom
-            min="1"
-            max="10"
+            // defaultValue={1}
+            // value={range}
+            // onChange={onChangeRange}
+            min={1}
+            max={10}
+            ref={ref}
+            {...rest}
             style={{ width: 440, marginTop: 15 }}
-            value={form.douleur ? form.douleur : pain}
-            onChange={(e) => {
-              handleChange(e, "douleur");
-            }}
           />
         </Form.Group>
         <div
@@ -51,11 +41,11 @@ const PainBar = ({ form, pain, handleChange }) => {
           }}
         >
           <i id="douleur"></i>
-          {form.douleur ? form.douleur : pain}/10
+          {range}/10
         </div>
       </div>
     </div>
   );
-};
+});
 
 export default PainBar;

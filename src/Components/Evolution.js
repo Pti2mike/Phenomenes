@@ -15,7 +15,7 @@ const Evolution = ({ data, setData, pheno }) => {
   const [evolCheckUp, setEvolCheckUp] = useState("");
   const [evolPrecision, setEvolPrecision] = useState("");
 
-  console.log(pheno);
+  // console.log(pheno);
 
   const evolutionsToSave = (idPheno) => {
     idPheno = pheno._id;

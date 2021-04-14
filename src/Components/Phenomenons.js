@@ -14,8 +14,8 @@ const Phenomenons = ({ data, setData }) => {
 
   // console.log("phenoSelected", phenoSelected);
   // console.log("Phénomènes", data);
-  console.log("selectedEvolID", selectedEvolID);
-  console.log("selectedID", selectedID);
+  // console.log("selectedEvolID", selectedEvolID);
+  // console.log("selectedID", selectedID);
 
   // Hover
   const seeButton = (event, index) => {
