@@ -7,6 +7,7 @@ import majorated from "../data/majorated.js";
 import checkUp from "../data/checkUp.js";
 import mobilities from "../data/mobilities";
 import evolutions from "../data/evolutions";
+import { useForm } from "react-hook-form";
 
 const EvolutionUpdate = ({
   data,
@@ -25,6 +26,8 @@ const EvolutionUpdate = ({
   const [evolMobility, setEvolMobility] = useState(evolution.mobility || "");
   const [evolCheckUp, setEvolCheckUp] = useState(evolution.checkUp || "");
   const [evolPrecision, setEvolPrecision] = useState(evolution.precision || "");
+
+  const { register, handleSubmit, formState, control } = useForm();
 
   const handleSaveEvo = async (idPhenomenon, idEvolution) => {
     console.log(`evoToUpdate ${idPhenomenon} ${idEvolution}`); // on récupère l'id du form et l'id de l'evolution concernés
@@ -92,10 +95,11 @@ const EvolutionUpdate = ({
               <Form.Control
                 as="select"
                 disabled={isEditing ? "disabled" : ""}
-                value={isEditing ? evolution.type : evolType}
-                onChange={(event) => {
-                  setEvolType(event.target.value);
-                }}
+                value={isEditing && evolution.type}
+                // onChange={(event) => {
+                //   setEvolType(event.target.value);
+                // }}
+                {...register("evolutions")}
               >
                 {evolutions.map((evo, index) => (
                   <option key={index} value={evo}>

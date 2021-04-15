@@ -78,7 +78,7 @@ const Phenomenons = ({ data, setData }) => {
                   }}
                 >
                   <div>
-                    {form.pheno} - {form.territoire}
+                    {form.phenomene} - {form.territoire}
                   </div>
 
                   <div

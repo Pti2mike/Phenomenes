@@ -23,7 +23,7 @@ const PainBar = React.forwardRef(({ onChange, ...rest }, ref) => {
         >
           <Form.Control
             type="range"
-            // defaultValue={1}
+            defaultValue={1}
             // value={range}
             // onChange={onChangeRange}
             min={1}
@@ -37,10 +37,9 @@ const PainBar = React.forwardRef(({ onChange, ...rest }, ref) => {
           style={{
             display: "flex",
             alignItems: "center",
-            marginTop: 25,
           }}
         >
-          <i id="douleur"></i>
+          {/* <i id="douleur"></i> */}
           {range}/10
         </div>
       </div>

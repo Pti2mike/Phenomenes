@@ -3,7 +3,7 @@ import axios from "axios";
 import Phenomenons from "./Phenomenons";
 import PainBar from "./PainBar";
 import { Alert, Form } from "react-bootstrap";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 const AllPhenomenons = () => {
   const phenomenons = [
@@ -98,7 +98,6 @@ const AllPhenomenons = () => {
   const checkUp = ["...", "Absent", "Bénin"];
 
   const [data, setData] = useState({});
-  const [form, setForm] = useState({});
 
   // Get all data from database
 
@@ -115,56 +114,6 @@ const AllPhenomenons = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  // Phénomènes à save
-
-  const phenoToSave = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/add-phenomenon",
-        // form
-        data
-      );
-      console.log(response);
-      setData(response.data.resultat);
-    } catch (error) {
-      alert({ error: error.message });
-    }
-  };
-
-  // Modification du phénomène TEST switch
-
-  // const handleChange = (event, type) => {
-  //   switch (type) {
-  //     case "pheno":
-  //       setForm({ ...form, pheno: event.target.value });
-  //       break;
-  //     case "territoire":
-  //       setForm({ ...form, territoire: event.target.value });
-  //       break;
-  //     case "majore":
-  //       setForm({ ...form, majore: event.target.value });
-  //       break;
-  //     case "date":
-  //       setForm({ ...form, date: event.target.value });
-  //       break;
-  //     case "douleur":
-  //       setForm({ ...form, douleur: event.target.value });
-  //       break;
-  //     case "mobility":
-  //       setForm({ ...form, mobility: event.target.value });
-  //       break;
-  //     case "checkUp":
-  //       setForm({ ...form, checkUp: event.target.value });
-  //       break;
-  //     case "precision":
-  //       setForm({ ...form, precision: event.target.value });
-  //       break;
-  //     default:
-  //       console.log("Type non trouvé");
-  //       break;
-  //   }
-  // };
 
   // Validation du phénomène
 
@@ -184,23 +133,31 @@ const AllPhenomenons = () => {
   //   });
   // };
 
-  const { register, handleSubmit, formState, control } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
-  const { isSubmitting, isSubmitted, isSubmitSuccessful } = formState;
+  // Validation du phénomène
 
-  const onSubmit = async (data) => {
-    console.log(data);
-    // phenoToSave();
+  const onSubmitForm = async (formValues) => {
+    console.log(formValues);
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/add-phenomenon",
+        formValues
+      );
+      console.log(response);
+
+      if (response.status === 200) {
+        setData(response.data.resultat);
+        reset();
+      }
+    } catch (error) {
+      alert({ error: error.message });
+    }
   };
-
-  console.log(formState);
 
   return (
     <div>
-      <Form style={{ marginBottom: 50 }} onSubmit={handleSubmit(onSubmit)}>
-        {isSubmitSuccessful && (
-          <Alert variant="success">Formulaire enregistré</Alert>
-        )}
+      <Form style={{ marginBottom: 50 }} onSubmit={handleSubmit(onSubmitForm)}>
         <div
           style={{
             display: "flex",
@@ -209,11 +166,11 @@ const AllPhenomenons = () => {
           }}
         >
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <Form.Group controlId="Phénomène">
+            <Form.Group controlId="Phenomene">
               <Form.Label style={{ display: "flex", justifyContent: "left" }}>
                 Nom du phénomène :
               </Form.Label>
-              <Form.Control as="select" {...register("phenomenon")}>
+              <Form.Control as="select" {...register("phenomene")}>
                 <option value="">Nom du phénomène</option>
                 {phenomenons.map((pheno, index) => (
                   <option key={index} value={pheno}>
@@ -344,7 +301,6 @@ const AllPhenomenons = () => {
 
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <button
-            disabled={isSubmitting}
             style={{
               backgroundColor: "#0069d9",
               color: "white",
