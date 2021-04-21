@@ -1,39 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import majorated from "../data/majorated.js";
 import checkUp from "../data/checkUp.js";
 import mobilities from "../data/mobilities";
 import evolutions from "../data/evolutions";
 import axios from "axios";
 import { Accordion, Button, Card, Form } from "react-bootstrap";
+import { useForm } from "react-hook-form";
 
 const Evolution = ({ data, setData, pheno }) => {
-  const [evolType, setEvolType] = useState("");
-  const [evolMajore, setEvolMajore] = useState("");
-  const [evolDate, setEvolDate] = useState("");
-  const [evolDouleur, setEvolDouleur] = useState(1);
-  const [evolMobility, setEvolMobility] = useState("");
-  const [evolCheckUp, setEvolCheckUp] = useState("");
-  const [evolPrecision, setEvolPrecision] = useState("");
-
   // console.log(pheno);
 
-  const evolutionsToSave = (idPheno) => {
+  const { register, handleSubmit, reset } = useForm();
+
+  const onSubmitFormEvo = async (formValues, idPheno) => {
+    console.log(formValues);
     idPheno = pheno._id;
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/add-evolution/${idPheno}`,
+        formValues
+      );
 
-    axios
-      .post(`http://localhost:3000/add-evolution/${idPheno}`, {
-        evolType,
-        evolMajore,
-        evolMobility,
-        evolDate,
-        evolDouleur,
-        evolPrecision,
-        evolCheckUp,
-      })
-      .then((response) => {
-        console.log(response);
-        // response.data.resultat
+      console.log(response);
 
+      if (response.status === 200) {
         setData(
           // Je récupère l'ancien état qui est un tableau
           (data) => {
@@ -49,21 +39,11 @@ const Evolution = ({ data, setData, pheno }) => {
             });
           }
         );
-      })
-      .catch((error) => alert({ error: error.message }));
-  };
-
-  const handleSubmitEvo = (event) => {
-    event.preventDefault();
-
-    evolutionsToSave();
-    setEvolType("");
-    setEvolMajore("");
-    setEvolMobility("");
-    setEvolDate("");
-    setEvolDouleur(1);
-    setEvolPrecision("");
-    setEvolCheckUp("");
+      }
+      reset();
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (
@@ -85,7 +65,8 @@ const Evolution = ({ data, setData, pheno }) => {
             }}
           >
             <Card.Title style={{ marginBottom: 0 }}>
-              {evolType ? evolType : "Ajouter une évolution"}
+              {/* {evolType ? evolType : "Ajouter une évolution"} */}
+              Ajouter une évolution
             </Card.Title>
             <Accordion.Toggle as={Button} variant="link" eventKey="0">
               Voir
@@ -93,7 +74,7 @@ const Evolution = ({ data, setData, pheno }) => {
           </Card.Header>
           <Accordion.Collapse eventKey="0">
             <Card.Body>
-              <Form>
+              <Form onSubmit={handleSubmit(onSubmitFormEvo)}>
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
@@ -103,13 +84,7 @@ const Evolution = ({ data, setData, pheno }) => {
                     >
                       Evolutions :
                     </Form.Label>
-                    <Form.Control
-                      as="select"
-                      value={evolType}
-                      onChange={(event) => {
-                        setEvolType(event.target.value);
-                      }}
-                    >
+                    <Form.Control as="select" {...register("evolType")}>
                       <option value="">Evolutions</option>
                       {evolutions.map((evo, index) => (
                         <option key={index} value={evo}>
@@ -125,13 +100,7 @@ const Evolution = ({ data, setData, pheno }) => {
                     >
                       Majoré par le mouvement :
                     </Form.Label>
-                    <Form.Control
-                      as="select"
-                      value={evolMajore}
-                      onChange={(event) => {
-                        setEvolMajore(event.target.value);
-                      }}
-                    >
+                    <Form.Control as="select" {...register("evolMajore")}>
                       <option value="">Majoré par le mouvement</option>
                       {majorated.map((major, index) => (
                         <option key={index} value={major}>
@@ -151,11 +120,8 @@ const Evolution = ({ data, setData, pheno }) => {
                       <Form.Control
                         as="input"
                         type="date"
-                        value={evolDate}
-                        onChange={(event) => {
-                          setEvolDate(event.target.value);
-                        }}
-                      ></Form.Control>
+                        {...register("evolDate")}
+                      />
                     </Form.Group>
                   </div>
                 </div>
@@ -183,10 +149,7 @@ const Evolution = ({ data, setData, pheno }) => {
                         min="1"
                         max="10"
                         style={{ width: 575 }}
-                        value={evolDouleur}
-                        onChange={(event) => {
-                          setEvolDouleur(event.target.value);
-                        }}
+                        {...register("evolDouleur")}
                       />
                     </Form.Group>
 
@@ -198,7 +161,7 @@ const Evolution = ({ data, setData, pheno }) => {
                       }}
                     >
                       <i id="douleur"></i>
-                      {evolDouleur}
+                      {""}
                       /10
                     </div>
                   </div>
@@ -220,10 +183,7 @@ const Evolution = ({ data, setData, pheno }) => {
                         rows={4}
                         cols={30}
                         placeholder="Votre texte ici..."
-                        value={evolPrecision}
-                        onChange={(event) => {
-                          setEvolPrecision(event.target.value);
-                        }}
+                        {...register("evolPrecision")}
                       ></Form.Control>
                     </Form.Group>
                   </div>
@@ -234,13 +194,7 @@ const Evolution = ({ data, setData, pheno }) => {
                       >
                         Mobilité globale restreinte :
                       </Form.Label>
-                      <Form.Control
-                        as="select"
-                        value={evolMobility}
-                        onChange={(event) => {
-                          setEvolMobility(event.target.value);
-                        }}
-                      >
+                      <Form.Control as="select" {...register("evolMobility")}>
                         <option value="">Mobilité globale restreinte</option>
                         {mobilities.map((mobility, index) => (
                           <option key={index} value={mobility}>
@@ -256,13 +210,7 @@ const Evolution = ({ data, setData, pheno }) => {
                       >
                         Bilan Médical :
                       </Form.Label>
-                      <Form.Control
-                        as="select"
-                        value={evolCheckUp}
-                        onChange={(event) => {
-                          setEvolCheckUp(event.target.value);
-                        }}
-                      >
+                      <Form.Control as="select" {...register("evolCheckUp")}>
                         <option value="">Bilan Médical</option>
                         {checkUp.map((check, index) => (
                           <option key={index} value={check}>
@@ -273,7 +221,7 @@ const Evolution = ({ data, setData, pheno }) => {
                     </Form.Group>
 
                     <div>
-                      <Button onClick={handleSubmitEvo}>Sauvegarder</Button>
+                      <Button type="submit">Sauvegarder</Button>
                     </div>
                   </div>
                 </div>

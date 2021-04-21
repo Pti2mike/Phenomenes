@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import AllEvolutions from "./AllEvolutions";
 import "./Phenomenons.css";
 import { Card } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrashAlt, faEye } from "@fortawesome/free-solid-svg-icons";
+import PhenomenesContext from "./MyContexts";
 
-const Phenomenons = ({ data, setData }) => {
+// const Phenomenons = ({ data, setData }) => {
+const Phenomenons = () => {
+  const { phenomenes } = useContext(PhenomenesContext);
+  // console.log(phenomenes);
+
   const [showDetails, setShowDetails] = useState(false);
   const [phenoSelected, setPhenoSelected] = useState(null);
   const [selectedID, setSelectedID] = useState();
@@ -37,11 +42,11 @@ const Phenomenons = ({ data, setData }) => {
         // }
       );
       if (response.data.message === "Deleted") {
-        setData(response.data.resultat);
+        // setData(response.data.resultat);
       }
       console.log("deletePheno", response);
     } catch (error) {
-      alert({ error: error.message });
+      alert(error.message);
     }
   };
 
@@ -57,75 +62,71 @@ const Phenomenons = ({ data, setData }) => {
         <h3>Phénomènes</h3>
         {/* Afficher la liste des phénomènes */}
 
-        {data &&
-          data.length > 0 &&
-          data.map((form, index) => {
-            return (
-              <Card
-                key={index}
+        {phenomenes &&
+          phenomenes.map((pheno, index) => (
+            <Card
+              key={index}
+              style={{
+                marginBottom: 5,
+                cursor: "pointer",
+              }}
+              // Au survol, affichage des buttons ou non
+              onMouseEnter={(event) => seeButton(event, index)}
+              onMouseLeave={(event) => seeButton(event, null)}
+            >
+              <Card.Body
                 style={{
-                  marginBottom: 5,
-                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
                 }}
-                // Au survol, affichage des buttons ou non
-                onMouseEnter={(event) => seeButton(event, index)}
-                onMouseLeave={(event) => seeButton(event, null)}
               >
-                <Card.Body
+                <div key={index}>
+                  {pheno.phenomene} - {pheno.territoire}
+                </div>
+
+                <div
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
+                    display: phenoSelected === index ? "" : "none",
                   }}
                 >
-                  <div>
-                    {form.phenomene} - {form.territoire}
-                  </div>
+                  <FontAwesomeIcon
+                    style={{ marginRight: 20 }}
+                    icon={faPlus}
+                    // style={{ display: phenoSelected === index ? "" : "none" }}
+                    onClick={() => {
+                      // handleShow();
+                      setSelectedID(pheno._id);
 
-                  <div
-                    style={{
-                      display: phenoSelected === index ? "" : "none",
+                      setShowDetails(!showDetails);
+                      setSelectedEvolID(pheno);
                     }}
-                  >
-                    <FontAwesomeIcon
-                      style={{ marginRight: 20 }}
-                      icon={faPlus}
-                      // style={{ display: phenoSelected === index ? "" : "none" }}
-                      onClick={() => {
-                        // handleShow();
-                        setSelectedID(form._id);
-                        alert("Voulez-vous ajouter une evolution ?");
-                        setShowDetails(!showDetails);
-                        setSelectedEvolID(form);
-                      }}
-                    />
-                    <FontAwesomeIcon
-                      style={{ marginRight: 20 }}
-                      icon={faTrashAlt}
-                      // style={{ display: phenoSelected === index ? "" : "none" }}
-                      onClick={() => {
-                        alert(`Delete ${form.pheno} ${form.territoire} ?`);
+                  />
+                  <FontAwesomeIcon
+                    style={{ marginRight: 20 }}
+                    icon={faTrashAlt}
+                    // style={{ display: phenoSelected === index ? "" : "none" }}
+                    onClick={() => {
+                      deletePheno(pheno._id);
+                    }}
+                  />
 
-                        deletePheno(form._id);
-                      }}
-                    />
-
-                    <FontAwesomeIcon
-                      icon={faEye}
-                      // style={{ display: phenoSelected === index ? "" : "none" }}
-                      onClick={() => {
-                        setShowDetails(!showDetails);
-                        setSelectedEvolID(form);
-                      }}
-                    />
-                  </div>
-                </Card.Body>
-              </Card>
-            );
-          })}
+                  <FontAwesomeIcon
+                    icon={faEye}
+                    // style={{ display: phenoSelected === index ? "" : "none" }}
+                    onClick={() => {
+                      setShowDetails(!showDetails);
+                      setSelectedEvolID(pheno);
+                    }}
+                  />
+                </div>
+              </Card.Body>
+            </Card>
+          ))}
       </div>
 
       <div style={{ visibility }}>
-        <AllEvolutions data={data} pheno={selectedEvolID} setData={setData} />
+        {/* <AllEvolutions data={data} pheno={selectedEvolID} setData={setData} /> */}
+        {/* <AllEvolutions /> */}
       </div>
     </div>
   );

@@ -27,7 +27,13 @@ const EvolutionUpdate = ({
   const [evolCheckUp, setEvolCheckUp] = useState(evolution.checkUp || "");
   const [evolPrecision, setEvolPrecision] = useState(evolution.precision || "");
 
-  const { register, handleSubmit, formState, control } = useForm();
+  console.log(evolution);
+
+  const { register, handleSubmit } = useForm();
+
+  const onSubmitEvoUpdate = (formEvoValues, idPhenomenon, idEvolution) => {
+    console.log(formEvoValues);
+  };
 
   const handleSaveEvo = async (idPhenomenon, idEvolution) => {
     console.log(`evoToUpdate ${idPhenomenon} ${idEvolution}`); // on récupère l'id du form et l'id de l'evolution concernés
@@ -79,34 +85,24 @@ const EvolutionUpdate = ({
 
       setIsEditing(!isEditing);
     } catch (error) {
-      alert({ error: error.message });
+      alert(error.message);
     }
   };
 
-  return (
+  return isEditing ? (
     <div>
       <div style={{ marginBottom: 20 }}>
-        <Form>
+        <Form onSubmit={handleSubmit(onSubmitEvoUpdate)}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Form.Group controlId="Evolutions">
               <Form.Label style={{ display: "flex", justifyContent: "left" }}>
                 Evolutions :
               </Form.Label>
               <Form.Control
-                as="select"
-                disabled={isEditing ? "disabled" : ""}
-                value={isEditing && evolution.type}
-                // onChange={(event) => {
-                //   setEvolType(event.target.value);
-                // }}
-                {...register("evolutions")}
-              >
-                {evolutions.map((evo, index) => (
-                  <option key={index} value={evo}>
-                    {evo}
-                  </option>
-                ))}
-              </Form.Control>
+                as="input"
+                disabled
+                value={evolution.type}
+              ></Form.Control>
             </Form.Group>
 
             <Form.Group controlId="Majorated">
@@ -114,20 +110,10 @@ const EvolutionUpdate = ({
                 Majoré par le mouvement :
               </Form.Label>
               <Form.Control
-                as="select"
-                disabled={isEditing ? "disabled" : ""}
-                value={isEditing ? evolution.majorated : evolMajore}
-                onChange={(event) => {
-                  setEvolMajore(event.target.value);
-                }}
-              >
-                <option value="">Majoré par le mouvement</option>
-                {majorated.map((major, index) => (
-                  <option key={index} value={major}>
-                    {major}
-                  </option>
-                ))}
-              </Form.Control>
+                as="input"
+                disabled
+                value={evolution.majorated}
+              ></Form.Control>
             </Form.Group>
 
             <div>
@@ -137,18 +123,11 @@ const EvolutionUpdate = ({
                 </Form.Label>
                 <Form.Control
                   as="input"
-                  type={isEditing ? "text" : "date"}
-                  disabled={isEditing ? "disabled" : ""}
+                  disabled
                   value={
-                    isEditing
-                      ? evolution.date
-                        ? format(new Date(evolution.date), "dd/MM/yyyy")
-                        : evolDate
-                      : evolDate
+                    evolution.date &&
+                    format(new Date(evolution.date), "dd/MM/yyyy")
                   }
-                  onChange={(event) => {
-                    setEvolDate(event.target.value);
-                  }}
                 ></Form.Control>
               </Form.Group>
             </div>
@@ -171,14 +150,11 @@ const EvolutionUpdate = ({
                 <Form.Control
                   type="range"
                   // custom
-                  disabled={isEditing ? "disabled" : ""}
+                  disabled
                   min="1"
                   max="10"
                   style={{ width: 575 }}
-                  value={isEditing ? evolution.douleur : evolDouleur}
-                  onChange={(event) => {
-                    setEvolDouleur(event.target.value);
-                  }}
+                  value={evolution.douleur}
                 />
               </Form.Group>
 
@@ -190,9 +166,7 @@ const EvolutionUpdate = ({
                 }}
               >
                 <i id="douleur"></i>
-                {isEditing && evolution.douleur
-                  ? evolution.douleur
-                  : evolDouleur}
+                {evolution.douleur}
                 /10
               </div>
             </div>
@@ -209,12 +183,8 @@ const EvolutionUpdate = ({
                   size="lg"
                   rows={4}
                   cols={35}
-                  disabled={isEditing ? "disabled" : ""}
-                  placeholder="Votre texte ici..."
-                  value={isEditing ? evolution.precision : evolPrecision}
-                  onChange={(event) => {
-                    setEvolPrecision(event.target.value);
-                  }}
+                  disabled
+                  value={evolution.precision}
                 ></Form.Control>
               </Form.Group>
             </div>
@@ -224,13 +194,126 @@ const EvolutionUpdate = ({
                   Mobilité globale restreinte :
                 </Form.Label>
                 <Form.Control
-                  as="select"
-                  disabled={isEditing ? "disabled" : ""}
-                  value={isEditing ? evolution.mobility : evolMobility}
-                  onChange={(event) => {
-                    setEvolMobility(event.target.value);
-                  }}
-                >
+                  disabled
+                  value={evolution.mobility}
+                ></Form.Control>
+              </Form.Group>
+
+              <Form.Group controlId="CheckUp">
+                <Form.Label style={{ display: "flex", justifyContent: "left" }}>
+                  Bilan Médical :
+                </Form.Label>
+                <Form.Control disabled value={evolution.checkUp}></Form.Control>
+              </Form.Group>
+            </div>
+          </div>
+        </Form>
+      </div>
+    </div>
+  ) : (
+    <div>
+      <div style={{ marginBottom: 20 }}>
+        <Form onSubmit={handleSubmit(onSubmitEvoUpdate)}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Form.Group controlId="Evolutions">
+              <Form.Label style={{ display: "flex", justifyContent: "left" }}>
+                Evolutions :
+              </Form.Label>
+              <Form.Control as="select" {...register("evolType")}>
+                {evolutions.map((evo, index) => (
+                  <option key={index} value={evo}>
+                    {evo}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId="Majorated">
+              <Form.Label style={{ display: "flex", justifyContent: "left" }}>
+                Majoré par le mouvement :
+              </Form.Label>
+              <Form.Control as="select" {...register("evolMajore")}>
+                {majorated.map((major, index) => (
+                  <option key={index} value={major}>
+                    {major}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+
+            <div>
+              <Form.Group controlId="Date">
+                <Form.Label style={{ display: "flex", justifyContent: "left" }}>
+                  Date :
+                </Form.Label>
+                <Form.Control
+                  as="input"
+                  type="text"
+                  {...register("evolDate")}
+                ></Form.Control>
+              </Form.Group>
+            </div>
+          </div>
+
+          <div id="slidecontainer">
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Form.Group
+                controlId="Douleur"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  marginRight: 20,
+                }}
+              >
+                <Form.Label style={{ display: "flex", justifyContent: "left" }}>
+                  Douleur :
+                </Form.Label>
+                <Form.Control
+                  type="range"
+                  // custom
+                  min="1"
+                  max="10"
+                  style={{ width: 575 }}
+                  {...register("evolDouleur")}
+                ></Form.Control>
+              </Form.Group>
+
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginTop: 13,
+                }}
+              >
+                <i id="douleur"></i>
+                {""}
+                /10
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div>
+              <Form.Group controlId="Précision">
+                <Form.Label style={{ display: "flex", justifyContent: "left" }}>
+                  Précision :
+                </Form.Label>
+                <Form.Control
+                  as="textarea"
+                  size="lg"
+                  rows={4}
+                  cols={35}
+                  {...register("evolPrecision")}
+                ></Form.Control>
+              </Form.Group>
+            </div>
+            <div>
+              <Form.Group controlId="Mobilité">
+                <Form.Label style={{ display: "flex", justifyContent: "left" }}>
+                  Mobilité globale restreinte :
+                </Form.Label>
+                <Form.Control as="select" {...register("evolMobility")}>
                   {mobilities.map((mobility, index) => (
                     <option key={index} value={mobility}>
                       {mobility}
@@ -243,15 +326,7 @@ const EvolutionUpdate = ({
                 <Form.Label style={{ display: "flex", justifyContent: "left" }}>
                   Bilan Médical :
                 </Form.Label>
-                <Form.Control
-                  as="select"
-                  disabled={isEditing ? "disabled" : ""}
-                  value={isEditing ? evolution.checkUp : evolCheckUp}
-                  onChange={(event) => {
-                    setEvolCheckUp(event.target.value);
-                  }}
-                >
-                  <option value="">Bilan Médical</option>
+                <Form.Control as="select" {...register("evolCheckUp")}>
                   {checkUp.map((check, index) => (
                     <option key={index} value={check}>
                       {check}
@@ -263,9 +338,10 @@ const EvolutionUpdate = ({
               <div>
                 {!isEditing && (
                   <Button
-                    onClick={() => {
-                      handleSaveEvo(pheno._id, evolution._id);
-                    }}
+                    type="submit"
+                    // onClick={() => {
+                    //   handleSaveEvo(pheno._id, evolution._id);
+                    // }}
                   >
                     Sauvegarder
                   </Button>

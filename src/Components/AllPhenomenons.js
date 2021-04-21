@@ -1,119 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Phenomenons from "./Phenomenons";
 import PainBar from "./PainBar";
-import { Alert, Form } from "react-bootstrap";
+import phenomenons from "../data/phenomenons";
+import territoires from "../data/territoires";
+import majorated from "../data/majorated";
+import mobilities from "../data/mobilities";
+import checkUp from "../data/checkUp";
+import { Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import PhenomenesContext from "./MyContexts";
 
 const AllPhenomenons = () => {
-  const phenomenons = [
-    "...",
-    "Douleur",
-    "Courbatures",
-    "Asthénie",
-    "Vertiges",
-    "Paresthésie",
-    "Céphalée",
-    "Autre",
-  ];
-
-  const territoires = [
-    "...",
-    "C2",
-    "C3",
-    "C4",
-    "C5",
-    "C6",
-    "C7",
-    "C8",
-    "T1",
-    "T2",
-    "T3",
-    "T4",
-    "T5",
-    "T6",
-    "T7",
-    "T8",
-    "T9",
-    "T10",
-    "T11",
-    "T12",
-    "L1",
-    "L2",
-    "L3",
-    "L4",
-    "L5",
-    "S1",
-    "S2",
-    "S3",
-    "S4",
-    "K1",
-    "K2",
-    "K3",
-    "K4",
-    "K5",
-    "K6",
-    "K7",
-    "K8",
-    "K9",
-    "K10",
-    "K11",
-    "K12",
-    "Tête",
-    "Crane",
-    "Face",
-    "Cou",
-    "Epaule",
-    "Bras",
-    "Coude",
-    "Avant-bras",
-    "Poignet",
-    "Main",
-    "Thorax",
-    "Abdomen",
-    "Epigastre",
-    "Hypochondre",
-    "Flanc",
-    "Région péri ombilicale",
-    "Fosse iliaque",
-    "Hypogastre",
-    "Lombes",
-    "Fesse",
-    "Coccyx",
-    "Périnée",
-    "Région génitale",
-    "Région annale",
-    "Hanche",
-    "Cuisse",
-    "Genou",
-    "Jambe",
-    "Cheville",
-    "Pied",
-  ];
-
-  const majorated = ["...", "oui", "non"];
-
-  const mobilities = ["...", "oui", "non"];
-
-  const checkUp = ["...", "Absent", "Bénin"];
-
   const [data, setData] = useState({});
 
-  // Get all data from database
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get("http://localhost:3000/all-phenomenons");
-
-      setData(response.data.phenomenons);
-    } catch (error) {
-      alert({ error: error.message });
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const { phenomenes } = useContext(PhenomenesContext);
+  console.log(phenomenes);
 
   // Validation du phénomène
 
@@ -151,7 +53,7 @@ const AllPhenomenons = () => {
         reset();
       }
     } catch (error) {
-      alert({ error: error.message });
+      alert(error.message);
     }
   };
 
@@ -316,7 +218,8 @@ const AllPhenomenons = () => {
         </div>
       </Form>
 
-      <Phenomenons data={data} setData={setData} />
+      {/* <Phenomenons data={data} setData={setData} /> */}
+      <Phenomenons />
     </div>
   );
 };

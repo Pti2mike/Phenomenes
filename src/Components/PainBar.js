@@ -6,7 +6,7 @@ const PainBar = React.forwardRef(({ onChange, ...rest }, ref) => {
     setRange(parseInt(e.target.value));
   };
 
-  console.log(rest);
+  // console.log(rest);
 
   const [range, setRange] = useState(1);
 

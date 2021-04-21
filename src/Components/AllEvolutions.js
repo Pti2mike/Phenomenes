@@ -12,7 +12,8 @@ const AllEvolutions = ({ data, setData, pheno }) => {
       }}
     >
       <h3>Evolutions</h3>
-      <Evolution pheno={pheno} setData={setData} data={data} />
+      {/* <Evolution pheno={pheno} setData={setData} data={data} /> */}
+      {/* <Evolution /> */}
 
       {pheno.evolutions &&
         data
