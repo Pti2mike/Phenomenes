@@ -1,13 +1,19 @@
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
-import PhenomenonCard from "./Containers/PhenomenonCard";
+import ContentCard from "./Containers/ContentCard";
 import PhenomenesContext from "./Components/MyContexts";
 import { PhenomenesProvider } from "./Components/MyContexts";
 import "./App.css";
 
 const App = () => {
-  const { phenomenes, setPhenomenes } = useContext(PhenomenesContext);
-  console.log(phenomenes);
+  const {
+    phenomenes,
+    setPhenomenes,
+    phenomeneSelected,
+    setPhenomeneSelected,
+    evolutionSelected,
+    setEvolutionSelected,
+  } = useContext(PhenomenesContext);
 
   const [data, setData] = useState([]);
 
@@ -28,10 +34,19 @@ const App = () => {
   }, []);
 
   return (
-    <PhenomenesProvider value={{ phenomenes: data, setPhenomenes: setData }}>
+    <PhenomenesProvider
+      value={{
+        phenomenes: data,
+        setPhenomenes: setData,
+        phenomeneSelected,
+        setPhenomeneSelected,
+        evolutionSelected,
+        setEvolutionSelected,
+      }}
+    >
       <div className="App">
         <h1>Phénomènes indésirables</h1>
-        <PhenomenonCard />
+        <ContentCard />
       </div>
     </PhenomenesProvider>
   );

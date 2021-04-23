@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import Phenomenons from "./Phenomenons";
 import PainBar from "./PainBar";
@@ -12,10 +12,10 @@ import { useForm } from "react-hook-form";
 import PhenomenesContext from "./MyContexts";
 
 const AllPhenomenons = () => {
-  const [data, setData] = useState({});
+  // const [data, setData] = useState({});
 
-  const { phenomenes } = useContext(PhenomenesContext);
-  console.log(phenomenes);
+  const { phenomenes, setPhenomenes } = useContext(PhenomenesContext);
+  // console.log(phenomenes);
 
   // Validation du phénomène
 
@@ -49,7 +49,7 @@ const AllPhenomenons = () => {
       console.log(response);
 
       if (response.status === 200) {
-        setData(response.data.resultat);
+        setPhenomenes(response.data.resultat);
         reset();
       }
     } catch (error) {
@@ -218,7 +218,6 @@ const AllPhenomenons = () => {
         </div>
       </Form>
 
-      {/* <Phenomenons data={data} setData={setData} /> */}
       <Phenomenons />
     </div>
   );

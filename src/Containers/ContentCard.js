@@ -2,7 +2,7 @@ import React from "react";
 import AllPhenomenons from "../Components/AllPhenomenons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faSave } from "@fortawesome/free-solid-svg-icons";
-import "./PhenomenonCard.css";
+import "./ContentCard.css";
 
 const PhenomenonCard = () => {
   return (
