@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import Accordions from "./Accordions";
 import Evolution from "./Evolution";
+import PhenomenesContext from "./MyContexts";
 
-const AllEvolutions = ({ data, setData, pheno }) => {
+const AllEvolutions = ({
+  data,
+  setData,
+  pheno,
+  showDetails,
+  setShowDetails,
+}) => {
+  const {
+    phenomenes,
+    setPhenomenes,
+    phenomeneSelected,
+    setPhenomeneSelected,
+  } = useContext(PhenomenesContext);
   return (
     <div
       style={{
@@ -13,9 +26,24 @@ const AllEvolutions = ({ data, setData, pheno }) => {
     >
       <h3>Evolutions</h3>
       {/* <Evolution pheno={pheno} setData={setData} data={data} /> */}
-      {/* <Evolution /> */}
 
-      {pheno.evolutions &&
+      {/* Ajouter une évolution */}
+      <Evolution />
+
+      {/* Evolution détails */}
+      {showDetails ? (
+        <div>
+          <span>Evolutions détail</span>
+          {phenomeneSelected &&
+            phenomenes
+              .find((toto) => toto._id === phenomeneSelected._id)
+              .evolutions.map((evo, index) => (
+                <div key={index}>{evo ? <Accordions evo={evo} /> : null}</div>
+              ))}
+        </div>
+      ) : null}
+
+      {/* {pheno.evolutions &&
         data
           .find((row) => row._id === pheno._id)
           .evolutions.map((evo, index) => (
@@ -32,7 +60,7 @@ const AllEvolutions = ({ data, setData, pheno }) => {
                 </>
               ) : null}
             </div>
-          ))}
+          ))} */}
     </div>
   );
 };

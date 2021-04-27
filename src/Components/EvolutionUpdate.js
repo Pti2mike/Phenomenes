@@ -16,18 +16,19 @@ const EvolutionUpdate = ({
   pheno,
   isEditing,
   setIsEditing,
+  evo,
 }) => {
-  const [evolType, setEvolType] = useState(evolution.type || "");
-  const [evolMajore, setEvolMajore] = useState(evolution.majorated || "");
+  const [evolType, setEvolType] = useState(evo.type || "");
+  const [evolMajore, setEvolMajore] = useState(evo.majorated || "");
   const [evolDate, setEvolDate] = useState(
-    (evolution.date && format(new Date(evolution.date), "dd/MM/yyyy")) || ""
+    (evo.date && format(new Date(evo.date), "dd/MM/yyyy")) || ""
   );
-  const [evolDouleur, setEvolDouleur] = useState(evolution.douleur || 1);
-  const [evolMobility, setEvolMobility] = useState(evolution.mobility || "");
-  const [evolCheckUp, setEvolCheckUp] = useState(evolution.checkUp || "");
-  const [evolPrecision, setEvolPrecision] = useState(evolution.precision || "");
+  const [evolDouleur, setEvolDouleur] = useState(evo.douleur || 1);
+  const [evolMobility, setEvolMobility] = useState(evo.mobility || "");
+  const [evolCheckUp, setEvolCheckUp] = useState(evo.checkUp || "");
+  const [evolPrecision, setEvolPrecision] = useState(evo.precision || "");
 
-  console.log(evolution);
+  console.log(evo);
 
   const { register, handleSubmit } = useForm();
 
@@ -98,11 +99,7 @@ const EvolutionUpdate = ({
               <Form.Label style={{ display: "flex", justifyContent: "left" }}>
                 Evolutions :
               </Form.Label>
-              <Form.Control
-                as="input"
-                disabled
-                value={evolution.type}
-              ></Form.Control>
+              <Form.Control as="input" disabled value={evo.type}></Form.Control>
             </Form.Group>
 
             <Form.Group controlId="Majorated">
@@ -112,7 +109,7 @@ const EvolutionUpdate = ({
               <Form.Control
                 as="input"
                 disabled
-                value={evolution.majorated}
+                value={evo.majorated}
               ></Form.Control>
             </Form.Group>
 
@@ -124,10 +121,7 @@ const EvolutionUpdate = ({
                 <Form.Control
                   as="input"
                   disabled
-                  value={
-                    evolution.date &&
-                    format(new Date(evolution.date), "dd/MM/yyyy")
-                  }
+                  value={evo.date && format(new Date(evo.date), "dd/MM/yyyy")}
                 ></Form.Control>
               </Form.Group>
             </div>
@@ -154,7 +148,7 @@ const EvolutionUpdate = ({
                   min="1"
                   max="10"
                   style={{ width: 575 }}
-                  value={evolution.douleur}
+                  value={evo.douleur}
                 />
               </Form.Group>
 
@@ -166,7 +160,7 @@ const EvolutionUpdate = ({
                 }}
               >
                 <i id="douleur"></i>
-                {evolution.douleur}
+                {evo.douleur}
                 /10
               </div>
             </div>
@@ -184,7 +178,7 @@ const EvolutionUpdate = ({
                   rows={4}
                   cols={35}
                   disabled
-                  value={evolution.precision}
+                  value={evo.precision}
                 ></Form.Control>
               </Form.Group>
             </div>
@@ -193,17 +187,14 @@ const EvolutionUpdate = ({
                 <Form.Label style={{ display: "flex", justifyContent: "left" }}>
                   Mobilité globale restreinte :
                 </Form.Label>
-                <Form.Control
-                  disabled
-                  value={evolution.mobility}
-                ></Form.Control>
+                <Form.Control disabled value={evo.mobility}></Form.Control>
               </Form.Group>
 
               <Form.Group controlId="CheckUp">
                 <Form.Label style={{ display: "flex", justifyContent: "left" }}>
                   Bilan Médical :
                 </Form.Label>
-                <Form.Control disabled value={evolution.checkUp}></Form.Control>
+                <Form.Control disabled value={evo.checkUp}></Form.Control>
               </Form.Group>
             </div>
           </div>

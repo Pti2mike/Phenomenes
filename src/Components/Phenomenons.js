@@ -6,10 +6,13 @@ import PhenomenonCard from "./PhenomenonCard";
 
 // const Phenomenons = ({ data, setData }) => {
 const Phenomenons = () => {
-  const { phenomenes } = useContext(PhenomenesContext);
+  const { phenomenes, phenomeneSelected, setPhenomeneSelected } = useContext(
+    PhenomenesContext
+  );
   // console.log(phenomenes);
 
   const [selectedEvolID, setSelectedEvolID] = useState({});
+  const [showDetails, setShowDetails] = useState(false);
 
   // console.log("selectedEvolID", selectedEvolID);
 
@@ -26,12 +29,19 @@ const Phenomenons = () => {
     >
       <div>
         <h3>Phénomènes</h3>
-        <PhenomenonCard />
+        <PhenomenonCard
+          showDetails={showDetails}
+          setShowDetails={setShowDetails}
+        />
       </div>
 
-      <div style={{ visibility }}>
+      {/* <div style={{ visibility }}> */}
+      <div>
         {/* <AllEvolutions data={data} pheno={selectedEvolID} setData={setData} /> */}
-        {/* <AllEvolutions /> */}
+        <AllEvolutions
+          showDetails={showDetails}
+          setShowDetails={setShowDetails}
+        />
       </div>
     </div>
   );

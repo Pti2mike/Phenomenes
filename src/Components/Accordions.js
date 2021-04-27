@@ -3,7 +3,7 @@ import { Accordion, Button, Card } from "react-bootstrap";
 import EvolutionUpdate from "./EvolutionUpdate";
 import axios from "axios";
 
-const Accordions = ({ data, setData, pheno, evolution, index }) => {
+const Accordions = ({ data, setData, pheno, evolution, index, evo }) => {
   const [isEditing, setIsEditing] = useState(true);
 
   // Supprimer une evolution d'un phenomène
@@ -46,9 +46,7 @@ const Accordions = ({ data, setData, pheno, evolution, index }) => {
               marginBottom: 0,
             }}
           >
-            <Card.Title style={{ marginBottom: 0 }}>
-              {evolution.type}
-            </Card.Title>
+            <Card.Title style={{ marginBottom: 0 }}>{evo.type}</Card.Title>
             <div style={{ display: "flex" }}>
               <div>
                 {isEditing ? (
@@ -93,12 +91,12 @@ const Accordions = ({ data, setData, pheno, evolution, index }) => {
           <Accordion.Collapse eventKey="0">
             <Card.Body>
               <EvolutionUpdate
-                data={data}
-                setData={setData}
-                pheno={pheno}
+                // data={data}
+                // setData={setData}
+                // pheno={pheno}
                 isEditing={isEditing}
                 setIsEditing={setIsEditing}
-                evolution={evolution}
+                evo={evo}
               />
             </Card.Body>
           </Accordion.Collapse>

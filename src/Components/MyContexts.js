@@ -3,7 +3,7 @@ import React from "react";
 const PhenomenesContext = React.createContext({
   phenomenes: [],
   setPhenomenes: () => {},
-  phenomeneSelected: "",
+  phenomeneSelected: {},
   setPhenomeneSelected: () => {},
   evolutionSelected: {},
   setEvolutionSelected: () => {},

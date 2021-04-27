@@ -16,6 +16,7 @@ const App = () => {
   } = useContext(PhenomenesContext);
 
   const [data, setData] = useState([]);
+  const [phenoSelected, setPhenoSelected] = useState({});
 
   // Get all data from database
 
@@ -38,8 +39,8 @@ const App = () => {
       value={{
         phenomenes: data,
         setPhenomenes: setData,
-        phenomeneSelected,
-        setPhenomeneSelected,
+        phenomeneSelected: phenoSelected,
+        setPhenomeneSelected: setPhenoSelected,
         evolutionSelected,
         setEvolutionSelected,
       }}
