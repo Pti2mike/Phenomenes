@@ -18,17 +18,17 @@ const EvolutionUpdate = ({
   setIsEditing,
   evo,
 }) => {
-  const [evolType, setEvolType] = useState(evo.type || "");
-  const [evolMajore, setEvolMajore] = useState(evo.majorated || "");
-  const [evolDate, setEvolDate] = useState(
-    (evo.date && format(new Date(evo.date), "dd/MM/yyyy")) || ""
-  );
-  const [evolDouleur, setEvolDouleur] = useState(evo.douleur || 1);
-  const [evolMobility, setEvolMobility] = useState(evo.mobility || "");
-  const [evolCheckUp, setEvolCheckUp] = useState(evo.checkUp || "");
-  const [evolPrecision, setEvolPrecision] = useState(evo.precision || "");
+  // const [evolType, setEvolType] = useState(evo.type || "");
+  // const [evolMajore, setEvolMajore] = useState(evo.majorated || "");
+  // const [evolDate, setEvolDate] = useState(
+  //   (evo.date && format(new Date(evo.date), "dd/MM/yyyy")) || ""
+  // );
+  // const [evolDouleur, setEvolDouleur] = useState(evo.douleur || 1);
+  // const [evolMobility, setEvolMobility] = useState(evo.mobility || "");
+  // const [evolCheckUp, setEvolCheckUp] = useState(evo.checkUp || "");
+  // const [evolPrecision, setEvolPrecision] = useState(evo.precision || "");
 
-  console.log(evo);
+  // console.log(evo);
 
   const { register, handleSubmit } = useForm();
 
@@ -36,59 +36,59 @@ const EvolutionUpdate = ({
     console.log(formEvoValues);
   };
 
-  const handleSaveEvo = async (idPhenomenon, idEvolution) => {
-    console.log(`evoToUpdate ${idPhenomenon} ${idEvolution}`); // on récupère l'id du form et l'id de l'evolution concernés
-    try {
-      const response = await axios.put(
-        `http://localhost:3000/phenomenon/${idPhenomenon}/update-evolution/${idEvolution}`,
-        {
-          evolType,
-          evolMajore,
-          evolMobility,
-          evolDate,
-          evolDouleur,
-          evolPrecision,
-          evolCheckUp,
-        }
-      );
-      console.log(response);
+  // const handleSaveEvo = async (idPhenomenon, idEvolution) => {
+  //   console.log(`evoToUpdate ${idPhenomenon} ${idEvolution}`); // on récupère l'id du form et l'id de l'evolution concernés
+  //   try {
+  //     const response = await axios.put(
+  //       `http://localhost:3000/phenomenon/${idPhenomenon}/update-evolution/${idEvolution}`,
+  //       {
+  //         evolType,
+  //         evolMajore,
+  //         evolMobility,
+  //         evolDate,
+  //         evolDouleur,
+  //         evolPrecision,
+  //         evolCheckUp,
+  //       }
+  //     );
+  //     console.log(response);
 
-      // setData([
-      //   ...data.map((row) => {
-      //     if (row._id === evolution._id) {
-      //       row.evolutions.push(response.data.resultat);
-      //     }
-      //     return row;
-      //   }),
-      // ]);
+  //     // setData([
+  //     //   ...data.map((row) => {
+  //     //     if (row._id === evolution._id) {
+  //     //       row.evolutions.push(response.data.resultat);
+  //     //     }
+  //     //     return row;
+  //     //   }),
+  //     // ]);
 
-      setData(
-        data.map((pheno) => {
-          if (pheno._id === idPhenomenon) {
-            pheno.evolutions = pheno.evolutions.map((evo) => {
-              if (evo._id === idEvolution) {
-                return response.data.resultat;
-              }
-              return evo;
-            });
-          }
-          return pheno;
-        })
-      );
+  //     setData(
+  //       data.map((pheno) => {
+  //         if (pheno._id === idPhenomenon) {
+  //           pheno.evolutions = pheno.evolutions.map((evo) => {
+  //             if (evo._id === idEvolution) {
+  //               return response.data.resultat;
+  //             }
+  //             return evo;
+  //           });
+  //         }
+  //         return pheno;
+  //       })
+  //     );
 
-      setEvolType("");
-      setEvolMajore("");
-      setEvolMobility("");
-      setEvolDate("");
-      setEvolDouleur(1);
-      setEvolPrecision("");
-      setEvolCheckUp("");
+  //     setEvolType("");
+  //     setEvolMajore("");
+  //     setEvolMobility("");
+  //     setEvolDate("");
+  //     setEvolDouleur(1);
+  //     setEvolPrecision("");
+  //     setEvolCheckUp("");
 
-      setIsEditing(!isEditing);
-    } catch (error) {
-      alert(error.message);
-    }
-  };
+  //     setIsEditing(!isEditing);
+  //   } catch (error) {
+  //     alert(error.message);
+  //   }
+  // };
 
   return isEditing ? (
     <div>
@@ -99,7 +99,11 @@ const EvolutionUpdate = ({
               <Form.Label style={{ display: "flex", justifyContent: "left" }}>
                 Evolutions :
               </Form.Label>
-              <Form.Control as="input" disabled value={evo.type}></Form.Control>
+              <Form.Control
+                as="input"
+                disabled
+                defaultValue={evo.type}
+              ></Form.Control>
             </Form.Group>
 
             <Form.Group controlId="Majorated">
@@ -109,7 +113,7 @@ const EvolutionUpdate = ({
               <Form.Control
                 as="input"
                 disabled
-                value={evo.majorated}
+                defaultValue={evo.majorated}
               ></Form.Control>
             </Form.Group>
 
@@ -121,7 +125,9 @@ const EvolutionUpdate = ({
                 <Form.Control
                   as="input"
                   disabled
-                  value={evo.date && format(new Date(evo.date), "dd/MM/yyyy")}
+                  defaultValue={
+                    evo.date && format(new Date(evo.date), "dd/MM/yyyy")
+                  }
                 ></Form.Control>
               </Form.Group>
             </div>
@@ -148,7 +154,7 @@ const EvolutionUpdate = ({
                   min="1"
                   max="10"
                   style={{ width: 575 }}
-                  value={evo.douleur}
+                  defaultValue={evo.douleur}
                 />
               </Form.Group>
 
@@ -178,7 +184,7 @@ const EvolutionUpdate = ({
                   rows={4}
                   cols={35}
                   disabled
-                  value={evo.precision}
+                  defaultValue={evo.precision}
                 ></Form.Control>
               </Form.Group>
             </div>
@@ -187,14 +193,20 @@ const EvolutionUpdate = ({
                 <Form.Label style={{ display: "flex", justifyContent: "left" }}>
                   Mobilité globale restreinte :
                 </Form.Label>
-                <Form.Control disabled value={evo.mobility}></Form.Control>
+                <Form.Control
+                  disabled
+                  defaultValue={evo.mobility}
+                ></Form.Control>
               </Form.Group>
 
               <Form.Group controlId="CheckUp">
                 <Form.Label style={{ display: "flex", justifyContent: "left" }}>
                   Bilan Médical :
                 </Form.Label>
-                <Form.Control disabled value={evo.checkUp}></Form.Control>
+                <Form.Control
+                  disabled
+                  defaultValue={evo.checkUp}
+                ></Form.Control>
               </Form.Group>
             </div>
           </div>

@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Accordion, Button, Card } from "react-bootstrap";
 import EvolutionUpdate from "./EvolutionUpdate";
 import axios from "axios";
+import PhenomenesContext from "./MyContexts";
 
-const Accordions = ({ data, setData, pheno, evolution, index, evo }) => {
+const Accordions = ({ pheno, evolution, index, evo }) => {
+  const { phenomenes, setPhenomenes, phenomeneSelected } = useContext(
+    PhenomenesContext
+  );
   const [isEditing, setIsEditing] = useState(true);
 
   // Supprimer une evolution d'un phenomène
@@ -17,12 +21,12 @@ const Accordions = ({ data, setData, pheno, evolution, index, evo }) => {
       .then((response) => {
         console.log(response.data.resultat);
 
-        setData(
-          data.map((row) => {
-            if (row._id === pheno._id) {
+        setPhenomenes(
+          phenomenes.map((row) => {
+            if (row._id === phenomeneSelected._id) {
               return {
                 ...row,
-                evolutions: pheno.evolutions.filter(
+                evolutions: phenomeneSelected.evolutions.filter(
                   (rowEvo) => rowEvo._id !== idEvolution
                 ),
               };
@@ -77,7 +81,7 @@ const Accordions = ({ data, setData, pheno, evolution, index, evo }) => {
                 <Button
                   style={{ marginRight: 5 }}
                   onClick={() => {
-                    deleteEvolution(pheno._id, evolution._id);
+                    deleteEvolution(phenomeneSelected._id, evo._id);
                   }}
                 >
                   Supprimer
@@ -91,9 +95,6 @@ const Accordions = ({ data, setData, pheno, evolution, index, evo }) => {
           <Accordion.Collapse eventKey="0">
             <Card.Body>
               <EvolutionUpdate
-                // data={data}
-                // setData={setData}
-                // pheno={pheno}
                 isEditing={isEditing}
                 setIsEditing={setIsEditing}
                 evo={evo}

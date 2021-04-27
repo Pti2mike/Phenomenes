@@ -43,7 +43,7 @@ const PhenoCardFill = ({ pheno, index, showDetails, setShowDetails }) => {
 
   const selectPheno = () => {
     setPhenomeneSelected(pheno);
-    setShowDetails(!showDetails);
+    setShowDetails(true);
   };
 
   return (
@@ -84,13 +84,7 @@ const PhenoCardFill = ({ pheno, index, showDetails, setShowDetails }) => {
             }}
           />
 
-          <FontAwesomeIcon
-            icon={faEye}
-            onClick={() => {
-              setShowDetails(!showDetails);
-              setSelectedEvolID(pheno);
-            }}
-          />
+          <FontAwesomeIcon icon={faEye} onClick={selectPheno} />
         </div>
       </Card.Body>
     </Card>
