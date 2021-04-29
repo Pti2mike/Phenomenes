@@ -17,13 +17,13 @@ const App = () => {
 
   const [data, setData] = useState([]);
   const [phenoSelected, setPhenoSelected] = useState({});
+  const [evolSelected, setEvolSelected] = useState({});
 
   // Get all data from database
 
   const fetchData = async () => {
     try {
       const response = await axios.get("http://localhost:3000/all-phenomenons");
-      // console.log(response);
       setData(response.data.phenomenons);
     } catch (error) {
       alert(error.message);
@@ -41,8 +41,8 @@ const App = () => {
         setPhenomenes: setData,
         phenomeneSelected: phenoSelected,
         setPhenomeneSelected: setPhenoSelected,
-        evolutionSelected,
-        setEvolutionSelected,
+        evolutionSelected: evolSelected,
+        setEvolutionSelected: setEvolSelected,
       }}
     >
       <div className="App">

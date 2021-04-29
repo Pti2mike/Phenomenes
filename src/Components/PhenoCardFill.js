@@ -11,11 +11,7 @@ const PhenoCardFill = ({ pheno, index, showDetails, setShowDetails }) => {
     PhenomenesContext
   );
 
-  const [selectedEvolID, setSelectedEvolID] = useState({});
   const [phenoButton, setPhenoButton] = useState({});
-
-  //   console.log("phenoSelected", phenoSelected);
-  //   console.log("selectedEvolID", selectedEvolID);
 
   // Hover
   const seeButton = (event, index) => {

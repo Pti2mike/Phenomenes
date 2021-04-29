@@ -1,20 +1,13 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import AllEvolutions from "./AllEvolutions";
 import "./Phenomenons.css";
-import PhenomenesContext from "./MyContexts";
+
 import PhenomenonCard from "./PhenomenonCard";
 
 // const Phenomenons = ({ data, setData }) => {
 const Phenomenons = () => {
-  const { phenomenes, phenomeneSelected, setPhenomeneSelected } = useContext(
-    PhenomenesContext
-  );
-  // console.log(phenomenes);
-
   const [selectedEvolID, setSelectedEvolID] = useState({});
   const [showDetails, setShowDetails] = useState(false);
-
-  // console.log("selectedEvolID", selectedEvolID);
 
   // Visibilité section all Evolutions
   const visibility = selectedEvolID._id ? "visible" : "hidden";
@@ -37,7 +30,6 @@ const Phenomenons = () => {
 
       {/* <div style={{ visibility }}> */}
       <div>
-        {/* <AllEvolutions data={data} pheno={selectedEvolID} setData={setData} /> */}
         <AllEvolutions
           showDetails={showDetails}
           setShowDetails={setShowDetails}

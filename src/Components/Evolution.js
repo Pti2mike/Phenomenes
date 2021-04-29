@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import majorated from "../data/majorated.js";
 import checkUp from "../data/checkUp.js";
 import mobilities from "../data/mobilities";
@@ -6,15 +6,18 @@ import evolutions from "../data/evolutions";
 import axios from "axios";
 import { Accordion, Button, Card, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import PhenomenesContext from "./MyContexts";
 
-const Evolution = ({ data, setData, pheno }) => {
-  // console.log(pheno);
+const Evolution = () => {
+  const { phenomeneSelected, setPhenomeneSelected } = useContext(
+    PhenomenesContext
+  );
 
   const { register, handleSubmit, reset } = useForm();
 
   const onSubmitFormEvo = async (formValues, idPheno) => {
     console.log(formValues);
-    idPheno = pheno._id;
+    idPheno = phenomeneSelected._id;
     try {
       const response = await axios.post(
         `http://localhost:3000/add-evolution/${idPheno}`,
@@ -23,23 +26,19 @@ const Evolution = ({ data, setData, pheno }) => {
 
       console.log(response);
 
-      if (response.status === 200) {
-        setData(
-          // Je récupère l'ancien état qui est un tableau
-          (data) => {
-            // Je parcours mon tableau
-            return data.map((row) => {
-              // Si row._id est égal à idPheno passé en paramètre
-              if (row._id === idPheno) {
-                // alors je le remplace par response.data.resultat
-                return response.data.resultat;
-              }
-              // Sinon je retourne row
-              return row;
-            });
+      // A revoir !!!!!!!
+
+      setPhenomeneSelected((phenomeneSelected) => {
+        phenomeneSelected.evolutions.map((e) => {
+          console.log(e);
+          if (e._id === idPheno) {
+            console.log(e._id, idPheno);
+            return response.data.resultat;
           }
-        );
-      }
+          return e;
+        });
+      });
+
       reset();
     } catch (error) {
       alert(error.message);
@@ -65,7 +64,6 @@ const Evolution = ({ data, setData, pheno }) => {
             }}
           >
             <Card.Title style={{ marginBottom: 0 }}>
-              {/* {evolType ? evolType : "Ajouter une évolution"} */}
               Ajouter une évolution
             </Card.Title>
             <Accordion.Toggle as={Button} variant="link" eventKey="0">

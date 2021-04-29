@@ -10,22 +10,12 @@ const PhenomenonCard = () => {
       <AllPhenomenons />
 
       <div className="card-footer">
-        <div
-          className="button"
-          onClick={() => {
-            alert("Etape précédente");
-          }}
-        >
+        <div className="button">
           <FontAwesomeIcon icon={faChevronLeft} />
           <div>Etape précédente</div>
         </div>
 
-        <div
-          className="button"
-          onClick={() => {
-            alert("Enregistrer la fiche ?");
-          }}
-        >
+        <div className="button">
           <FontAwesomeIcon icon={faSave} />
           <div>Enregistrer la fiche</div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import Phenomenons from "./Phenomenons";
 import PainBar from "./PainBar";
@@ -12,28 +12,7 @@ import { useForm } from "react-hook-form";
 import PhenomenesContext from "./MyContexts";
 
 const AllPhenomenons = () => {
-  // const [data, setData] = useState({});
-
-  const { phenomenes, setPhenomenes } = useContext(PhenomenesContext);
-  // console.log(phenomenes);
-
-  // Validation du phénomène
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   phenoToSave();
-  //   setForm({
-  //     pheno: "",
-  //     territoire: "",
-  //     majore: "",
-  //     date: "",
-  //     douleur: 1,
-  //     mobility: "",
-  //     checkUp: "",
-  //     precision: "",
-  //   });
-  // };
+  const { setPhenomenes } = useContext(PhenomenesContext);
 
   const { register, handleSubmit, reset } = useForm();
 
@@ -46,7 +25,6 @@ const AllPhenomenons = () => {
         "http://localhost:3000/add-phenomenon",
         formValues
       );
-      console.log(response);
 
       if (response.status === 200) {
         setPhenomenes(response.data.resultat);

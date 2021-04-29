@@ -4,10 +4,13 @@ import EvolutionUpdate from "./EvolutionUpdate";
 import axios from "axios";
 import PhenomenesContext from "./MyContexts";
 
-const Accordions = ({ pheno, evolution, index, evo }) => {
-  const { phenomenes, setPhenomenes, phenomeneSelected } = useContext(
-    PhenomenesContext
-  );
+const Accordions = ({ evo }) => {
+  const {
+    phenomenes,
+    setPhenomenes,
+    phenomeneSelected,
+    setEvolutionSelected,
+  } = useContext(PhenomenesContext);
   const [isEditing, setIsEditing] = useState(true);
 
   // Supprimer une evolution d'un phenomène
@@ -59,7 +62,7 @@ const Accordions = ({ pheno, evolution, index, evo }) => {
                     onClick={() => {
                       // updateEvolution(pheno._id, evo._id);
                       setIsEditing(!isEditing);
-                      alert("Mode modification");
+                      setEvolutionSelected(evo._id);
                     }}
                   >
                     Modifier
@@ -71,7 +74,6 @@ const Accordions = ({ pheno, evolution, index, evo }) => {
                     onClick={() => {
                       // updateEvolution(pheno._id, evo._id);
                       setIsEditing(!isEditing);
-                      alert("Annuler modification");
                     }}
                   >
                     Annuler
